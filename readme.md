@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Константин Суриков](https://up.htmlacademy.ru/nodejs/3/user/598165).
-* Наставник: `Неизвестно`.
+* Наставник: [Артем Брилев](https://htmlacademy.ru/profile/id1126425).
 
 ---
 
