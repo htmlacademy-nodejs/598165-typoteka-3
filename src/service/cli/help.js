@@ -3,11 +3,12 @@
 const chalk = require(`chalk`);
 
 const helpMessage = `Гайд:
-  service<command>
+  service <command>
 Команды:
 --version: выводит номер версии
 --help: печатает этот текст
---generate < count > формирует файл mocks.json
+--generate <count> формирует файл mocks.json
+--server <port> запускает http-сервер
 
     `;
 
