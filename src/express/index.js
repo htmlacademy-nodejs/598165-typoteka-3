@@ -27,12 +27,12 @@ app.use(`/articles`, articlesRouter);
 
 app.use((req, res) => {
   res.status(404);
-  res.render(`errors/404`)
+  res.render(`errors/404`);
 });
 
 app.use((req, res) => {
   res.status(500);
-  res.render(`errors/500`)
+  res.render(`errors/500`);
 });
 
 
