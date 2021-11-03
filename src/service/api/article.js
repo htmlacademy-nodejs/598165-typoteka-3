@@ -3,7 +3,7 @@
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
 const articleValidator = require(`../middleware/article-validator`);
-const articleExist = require(`../middleware/article-exist`);
+const articleExists = require(`../middleware/article-exists`);
 const commentsValidator = require(`../middleware/comments-validator`);
 
 const route = new Router();
@@ -14,7 +14,7 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/`, (req, res) => {
     const articles = articleService.findAll();
-    res.status(HttpCode.SUCCESS).json(articles);
+    res.status(HttpCode.OK).json(articles);
   });
 
   route.get(`/:articleId`, (req, res) => {
@@ -23,10 +23,10 @@ module.exports = (app, articleService, commentService) => {
 
     if (!article) {
       return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+        .send(`Article with ID ${articleId} wasn't found`);
     }
 
-    return res.status(HttpCode.SUCCESS)
+    return res.status(HttpCode.OK)
       .json(article);
   });
 
@@ -37,49 +37,43 @@ module.exports = (app, articleService, commentService) => {
   });
 
   route.put(`/:articleId`, articleValidator, (req, res) => {
-
     const {articleId} = req.params;
-    const articleExists = articleService.findOne(articleId);
+    const oldArticle = articleService.findOne(articleId);
 
-    if (!articleExists) {
+    if (!oldArticle) {
       return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found article with ${articleId}`);
+        .send(`Article with ID ${articleId} wasn't found`);
     }
 
     const updatedArticle = articleService.update(articleId, req.body);
 
-    return res.status(HttpCode.SUCCESS)
+    return res.status(HttpCode.OK)
       .json(updatedArticle);
   });
 
   route.delete(`/:articleId`, (req, res) => {
-
     const {articleId} = req.params;
     console.log(articleId);
-    const article = articleService.drop(articleId);
+    const deletedArticle = articleService.drop(articleId);
 
-    if (!article) {
+    if (!deletedArticle) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Not found`);
     }
 
-    return res.status(HttpCode.SUCCESS)
-      .json(article);
-
+    return res.status(HttpCode.OK)
+      .json(deletedArticle);
   });
 
-  route.get(`/:articleId/comments`, articleExist(articleService), (req, res) => {
-
+  route.get(`/:articleId/comments`, articleExists(articleService), (req, res) => {
     const {article} = res.locals;
     const comments = commentService.findAll(article);
 
-    res.status(HttpCode.SUCCESS)
+    res.status(HttpCode.OK)
       .json(comments);
-
   });
 
-  route.delete(`/:articleId/comments/:commentId`, articleExist(articleService), (req, res) => {
-
+  route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), (req, res) => {
     const {article} = res.locals;
     const {commentId} = req.params;
     const deletedComment = commentService.drop(article, commentId);
@@ -89,18 +83,15 @@ module.exports = (app, articleService, commentService) => {
         .send(`Not found`);
     }
 
-    return res.status(HttpCode.SUCCESS)
+    return res.status(HttpCode.OK)
       .json(deletedComment);
   });
 
-  route.post(`/:articleId/comments`, [articleExist(articleService), commentsValidator], (req, res) => {
+  route.post(`/:articleId/comments`, [articleExists(articleService), commentsValidator], (req, res) => {
     const {article} = res.locals;
     const comment = commentService.create(article, req.body);
 
     return res.status(HttpCode.CREATED)
       .json(comment);
-
   });
-
 };
-

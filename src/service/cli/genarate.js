@@ -5,10 +5,10 @@ const fs = require(`fs`).promises;
 const {nanoid} = require(`nanoid`);
 
 const {getRandomInt, shuffle} = require(`../../utils`);
-const {MAX_ID_LENGTH} = require(`../../constants`);
+const {MAX_ID_LENGTH, MOCK_FILE, ExitCode} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
-const FILE_NAME = `mocks.json`;
+
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
@@ -36,7 +36,7 @@ const getPublications = (count, sentences, titles, categories, comments) => {
           .slice(0, getRandomInt(0, MAX_ANNOUNCES)),
         fullText: shuffle(sentences)
           .slice(0, getRandomInt(0, sentences.length - 1)),
-        сategory: shuffle(categories)
+        category: shuffle(categories)
           .slice(0, getRandomInt(1, MAX_CATEGORIES)),
         comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
       };
@@ -78,15 +78,15 @@ module.exports = {
     if (publicationsCount < MAX_COUNT) {
       const content = JSON.stringify(getPublications(publicationsCount, sentences, titles, categories, comments));
       try {
-        await fs.writeFile(FILE_NAME, content);
-        console.info(chalk.green(`Operation succeeded, file created.`));
+        await fs.writeFile(MOCK_FILE, content);
+        console.info(chalk.green(`Operation is successful, the file is created.`));
       } catch (err) {
-        console.error(chalk.error(`Can't write data to file`));
-        process.exit(1);
+        console.error(chalk.red(`Can't write data to the file`));
+        process.exit(ExitCode.error);
       }
     } else {
       console.error(chalk.red(`No more than ${MAX_COUNT} publications`));
-      process.exit(1);
+      process.exit(ExitCode.error);
     }
   }
 };

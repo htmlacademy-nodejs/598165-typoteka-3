@@ -1,7 +1,7 @@
 GET http://localhost:3000/api/articles/ HTTP/1.1
 ###
 
-GET http://localhost:3000/api/articles/66j6pN HTTP/1.1
+GET http://localhost:3000/api/articles/OUlGww HTTP/1.1
 ###
 
 GET http://localhost:3000/api/categories/ HTTP/1.1
@@ -22,11 +22,11 @@ Content-Type: application/json
       "Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать.",
       "Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле?"
     ],
-    "сategory": ["Разное", "Программирование"]
+    "category": ["Разное", "Программирование"]
   }
 ###
 
-PUT http://localhost:3000/api/articles/Oo9_AP HTTP/1.1
+PUT http://localhost:3000/api/articles/OUlGww HTTP/1.1
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
       "Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике.",
       "Собрать камни бесконечности легко, если вы прирожденный герой."
     ],
-    "сategory": [
+    "category": [
       "Программирование"
     ],
     "comments": [
@@ -60,16 +60,16 @@ Content-Type: application/json
   }
 ###
 
-DELETE http://localhost:3000/api/articles/Oo9_AP HTTP/1.1
+DELETE http://localhost:3000/api/articles/OUlGww HTTP/1.1
 ###
 
-GET http://localhost:3000/api/articles/loVV_P/comments HTTP/1.1
+GET http://localhost:3000/api/articles/c1w4dl/comments HTTP/1.1
 ###
 
-DELETE http://localhost:3000/api/articles/loVV_P/comments/_q0VB4 HTTP/1.1
+DELETE http://localhost:3000/api/articles/c1w4dl/comments/CnFvpB HTTP/1.1
 ###
 
-POST http://localhost:3000/api/articles/loVV_P/comments/ HTTP/1.1
+POST http://localhost:3000/api/articles/c1w4dl/comments/ HTTP/1.1
 Content-Type: application/json
 
 {
@@ -77,5 +77,5 @@ Content-Type: application/json
 }
 ###
 
-GET http://localhost:3000/api/search?query=золотое HTTP/1.1
+GET http://localhost:3000/api/search?query=Рок HTTP/1.1
 ###
