@@ -6,10 +6,9 @@ const articleValidator = require(`../middleware/article-validator`);
 const articleExists = require(`../middleware/article-exists`);
 const commentsValidator = require(`../middleware/comments-validator`);
 
-const route = new Router();
 
 module.exports = (app, articleService, commentService) => {
-
+  const route = new Router();
   app.use(`/articles`, route);
 
   route.get(`/`, (req, res) => {
@@ -53,7 +52,6 @@ module.exports = (app, articleService, commentService) => {
 
   route.delete(`/:articleId`, (req, res) => {
     const {articleId} = req.params;
-    console.log(articleId);
     const deletedArticle = articleService.drop(articleId);
 
     if (!deletedArticle) {

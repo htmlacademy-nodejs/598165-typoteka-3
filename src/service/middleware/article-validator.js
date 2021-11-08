@@ -7,6 +7,7 @@ const articleKeys = [
   `announce`,
   `fullText`,
   `category`,
+  `comments`
 ];
 
 module.exports = (req, res, next) => {
@@ -15,7 +16,7 @@ module.exports = (req, res, next) => {
   const keysExist = articleKeys.every((key) => keys.includes(key));
 
   if (!keysExist) {
-    res.status(HttpCode.BAD_REQUEST)
+    return res.status(HttpCode.BAD_REQUEST)
       .send(`Bad request`);
   }
 
