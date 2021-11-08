@@ -6,7 +6,8 @@
   "scripts": {
     "eslint": "eslint --ext .js src/",
     "server": "nodemon ./src/service/service.js --server",
-    "start": "node ./src/service/service.js",
+    "start": "cross-env NODE_ENV=producton node ./src/service/service.js",
+    "start:debug": "cross-env NODE_ENV=development node ./src/service/service.js",
     "start-front-server": "nodemon ./src/express/index.js",
     "test": "npm run eslint && jest",
     "jest": "jest"
@@ -26,13 +27,16 @@
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "27.3.1",
     "nodemon": "2.0.2",
+    "pino-pretty": "7.2.0",
     "pug-lint": "^2.6.0",
     "supertest": "6.1.6"
   },
   "dependencies": {
     "chalk": "3.0.0",
+    "cross-env": "7.0.3",
     "express": "4.17.1",
     "nanoid": "3.1.7",
+    "pino": "7.1.0",
     "pug": "2.0.4"
   }
 }
