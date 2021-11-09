@@ -133,4 +133,4 @@ test(`API returns the 404 code when nothing is found`, () => request(app)
   .get(`/search`)
   .query({
     query: `An article that doesn't exist`
-  }))
+  }));

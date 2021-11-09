@@ -22,7 +22,7 @@ module.exports = (app, service) => {
         ? HttpCode.OK
         : HttpCode.NOT_FOUND;
 
-    res.status(searchStatus)
+    return res.status(searchStatus)
       .json(searchResults);
   });
 };
