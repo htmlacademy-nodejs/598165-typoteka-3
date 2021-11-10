@@ -23,7 +23,8 @@ const getRandomFromArray = (array) => {
   return array[getRandomInt(0, array.length - 1)];
 };
 
-const getPublications = (count, sentences, titles, categories, comments) => {
+const getPublications = (count, data) => {
+  const {sentences, titles, categories, comments} = data;
   return Array(count)
     .fill({})
     .map(() => {
@@ -68,15 +69,17 @@ module.exports = {
   name: `--generate`,
 
   async run(args) {
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const titles = await readContent(FILE_TITLES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
-    const comments = await readContent(FILE_COMMENTS_PATH);
+    const mockData = {
+      sentences: await readContent(FILE_SENTENCES_PATH),
+      titles: await readContent(FILE_TITLES_PATH),
+      categories: await readContent(FILE_CATEGORIES_PATH),
+      comments: await readContent(FILE_COMMENTS_PATH),
+    };
     const [count] = args;
     const publicationsCount = parseInt(count, 10) || DEFAULT_COUNT;
 
     if (publicationsCount < MAX_COUNT) {
-      const content = JSON.stringify(getPublications(publicationsCount, sentences, titles, categories, comments));
+      const content = JSON.stringify(getPublications(publicationsCount, mockData));
       try {
         await fs.writeFile(MOCK_FILE, content);
         console.info(chalk.green(`Operation is successful, the file is created.`));

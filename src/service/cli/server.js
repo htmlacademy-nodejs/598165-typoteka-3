@@ -5,8 +5,7 @@ const routes = require(`../api`);
 const {getLogger} = require(`../lib/logger`);
 
 const {HttpCode, API_PREFIX, ExitCode} = require(`../../constants`);
-const DEFAULT_PORT = 3000;
-
+const DEFAULT_PORT = process.env.PORT || 3000;
 
 const app = express();
 const logger = getLogger({name: `api`});
