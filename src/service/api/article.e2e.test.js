@@ -128,6 +128,14 @@ describe(`API changes an existent article`, () => {
 
   test(`The status code is 200`, () =>
     expect(response.statusCode).toBe(HttpCode.OK));
+
+  test(`Returns the changed article`, () =>
+    expect(response.body).toEqual(expect.objectContaining(newArticle)));
+
+  test(`The article is really changed`, () =>
+    request(app)
+      .get(`/articles/Mvn4TY`)
+      .expect((res) => expect(res.body.title).toBe(`Обзор новейшего смартфона`)));
 });
 
 test(`API returns the 404 status when trying to change a non-existent article`, () => {
@@ -277,6 +285,14 @@ describe(`API correctly deletes a comment`, () => {
 
   test(`The number of comments is now 1`, () =>
     request(app)
-    .get(`/articles/Mvn4TY/comments/`)
-    .expect((res) => expect(res.body.length).toBe(1)));
+      .get(`/articles/Mvn4TY/comments/`)
+      .expect((res) => expect(res.body.length).toBe(1)));
+});
+
+test(`API doesn't delete a non-existed comment`, () => {
+  const app = createApi();
+
+  return request(app)
+    .delete(`/articles/Mvn4TY/comments/NOEXISTS`)
+    .expect(HttpCode.NOT_FOUND);
 });
