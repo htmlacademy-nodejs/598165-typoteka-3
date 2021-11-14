@@ -6,18 +6,19 @@ const articleKeys = [
   `createdDate`,
   `announce`,
   `fullText`,
-  `сategory`,
+  `category`,
+  `comments`
 ];
 
 module.exports = (req, res, next) => {
   const newArticle = req.body;
   const keys = Object.keys(newArticle);
-  const keysExists = articleKeys.every((key) => keys.includes(key));
+  const keysExist = articleKeys.every((key) => keys.includes(key));
 
-  if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
+  if (!keysExist) {
+    return res.status(HttpCode.BAD_REQUEST)
       .send(`Bad request`);
   }
 
-  next();
+  return next();
 };

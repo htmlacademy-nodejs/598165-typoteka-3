@@ -16,7 +16,6 @@ class ArticleService {
     }, article);
 
     this._articles.push(newArticle);
-
     return newArticle;
   }
 
@@ -28,7 +27,6 @@ class ArticleService {
     }
 
     this._articles = this._articles.filter((article) => article.id !== id);
-
     return foundArticle;
   }
 
@@ -43,7 +41,11 @@ class ArticleService {
   update(id, article) {
     const oldArticle = this._articles
       .find((item) => item.id === id);
-    return Object.assign(oldArticle, article);
+    const updatedArticle = Object.assign(oldArticle, article);
+    this._articles = this._articles.filter((item) => item.id !== id);
+    this._articles.push(updatedArticle);
+
+    return updatedArticle;
   }
 }
 
