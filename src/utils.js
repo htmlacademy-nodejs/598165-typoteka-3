@@ -17,7 +17,10 @@ const shuffle = (array) => {
   return shuffled;
 };
 
+const ensureArray = (arg) => Array.isArray(arg) ? arg : [arg];
+
 module.exports = {
   getRandomInt,
-  shuffle
+  shuffle,
+  ensureArray
 };

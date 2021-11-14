@@ -18,6 +18,7 @@ const MAX_COUNT = 1000;
 const MAX_CATEGORIES = 3;
 const MAX_COMMENTS = 4;
 const TIME_SPAN = 91 * 24 * 60 * 60 * 1000;
+const PICTURES = [`forest@1x.jpg`, `sea@1x.jpg`, `skyscraper@1x.jpg`, ``];
 
 const getRandomFromArray = (array) => {
   return array[getRandomInt(0, array.length - 1)];
@@ -34,12 +35,13 @@ const getPublications = (count, data) => {
         createdDate: new Date(getRandomInt(Date.now() - TIME_SPAN, Date.now()))
           .toLocaleString(),
         announce: shuffle(sentences)
-          .slice(0, getRandomInt(0, MAX_ANNOUNCES)),
+          .slice(0, getRandomInt(1, MAX_ANNOUNCES)).join(` `),
         fullText: shuffle(sentences)
-          .slice(0, getRandomInt(0, sentences.length - 1)),
+          .slice(0, getRandomInt(1, sentences.length - 1)),
         category: shuffle(categories)
           .slice(0, getRandomInt(1, MAX_CATEGORIES)),
         comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
+        picture: getRandomFromArray(PICTURES)
       };
     });
 };
@@ -51,6 +53,8 @@ const generateComments = (count, comments) => {
       text: shuffle(comments)
         .slice(0, getRandomInt(1, 3))
         .join(` `),
+      createdDate: new Date(getRandomInt(Date.now() - TIME_SPAN, Date.now()))
+        .toLocaleString()
     };
   });
 };

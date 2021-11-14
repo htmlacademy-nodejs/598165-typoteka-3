@@ -5,8 +5,20 @@ block content
     section.search-page
       .search-page__wrapper
         h1 Поиск
-        .search.search-page__form
-          form(action='#' method='get')
+        .search.search-page__form(class=`${results && !results.length ? 'search-page__wrapper--empty' : ''}`)
+          form(action='/search' method='get')
             label
-              input(type='text' placeholder='Что ищем?')
+              input(type='text' name='query' placeholder='Что ищем?')
             button.search__button.button.button--transparent(type='submit') Найти
+          if (results && results.length)
+            each result in results
+              .search__result
+                time.search__date(datetime=`${new Date(result.createdDate).toISOString()}`)
+                  +formatDate(new Date(result.createdDate))
+                a.search__link(href=`articles/${result.id}`)
+                  | #{result.title}
+        if (results && !results.length)
+          p.search-page__empty Ничего не нашлось
+
+
+

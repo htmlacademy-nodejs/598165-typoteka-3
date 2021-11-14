@@ -7,7 +7,7 @@ const articleKeys = [
   `announce`,
   `fullText`,
   `category`,
-  `comments`
+  `picture`
 ];
 
 module.exports = (req, res, next) => {
