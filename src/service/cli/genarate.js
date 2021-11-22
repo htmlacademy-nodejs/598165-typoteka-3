@@ -2,10 +2,10 @@
 
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
-const {nanoid} = require(`nanoid`);
+const crypto = require(`crypto`);
 
 const {getRandomInt, shuffle} = require(`../../utils`);
-const {MAX_ID_LENGTH, MOCK_FILE, ExitCode} = require(`../../constants`);
+const {MOCK_FILE, ExitCode} = require(`../../constants`);
 
 const DEFAULT_COUNT = 1;
 
@@ -30,7 +30,7 @@ const getPublications = (count, data) => {
     .fill({})
     .map(() => {
       return {
-        id: nanoid(MAX_ID_LENGTH),
+        id: crypto.randomUUID(),
         title: getRandomFromArray(titles),
         createdDate: new Date(getRandomInt(Date.now() - TIME_SPAN, Date.now()))
           .toLocaleString(),
@@ -49,7 +49,7 @@ const getPublications = (count, data) => {
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => {
     return {
-      id: nanoid(MAX_ID_LENGTH),
+      id: crypto.randomUUID(),
       text: shuffle(comments)
         .slice(0, getRandomInt(1, 3))
         .join(` `),

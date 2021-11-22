@@ -9,6 +9,7 @@
     "start": "cross-env NODE_ENV=producton node ./src/service/service.js",
     "start:debug": "cross-env NODE_ENV=development node ./src/service/service.js",
     "start-front-server": "nodemon src/express/express.js",
+    "start-front-server:debug": "cross-env NODE_ENV=development nodemon src/express/express.js",
     "test": "npm run eslint && jest",
     "jest": "jest"
   },
@@ -37,7 +38,6 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "multer": "1.4.3",
-    "nanoid": "3.1.7",
     "pino": "7.1.0",
     "pug": "2.0.4"
   }
