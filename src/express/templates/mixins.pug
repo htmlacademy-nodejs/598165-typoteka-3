@@ -1,0 +1,21 @@
+block mixins
+  mixin insertArticleImg(article)
+    if article.picture
+      - const filename = article.picture;
+
+      .preview__background
+        img.preview__background-image(
+          src=`/img/${filename}`
+          width='460'
+          height='240'
+          alt=`${article.title}`)
+
+  mixin formatDate(date)
+      - const fullYear = date.getFullYear()
+      - const month = (date.getMonth() + 1).toString().padStart(2, `0`)
+      - const day = date.getDate().toString().padStart(2, `0`);
+      - const hours = date.getHours().toString().padStart(2, `0`);
+      - const minutes = date.getMinutes().toString().padStart(2, `0`);
+
+      | #{`${day}.${month}.${fullYear}, ${hours}:${minutes}`}
+

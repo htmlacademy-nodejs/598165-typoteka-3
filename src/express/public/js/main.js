@@ -267,6 +267,7 @@ function assign(ta) {
 
   window.addEventListener('resize', pageResize, false);
   ta.addEventListener('input', renew, false);
+  ta.addEventListener('focus', renew, false);
   ta.addEventListener('autosize:renew', renew, false);
   ta.style.overflowX = 'hidden';
   ta.style.wordWrap = 'break-word';
