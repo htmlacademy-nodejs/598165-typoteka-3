@@ -1,7 +1,5 @@
 'use strict';
 
-const {Router} = require(`express`);
-
 const article = require(`./article`);
 const category = require(`./category`);
 const search = require(`./search`);
@@ -15,15 +13,13 @@ const {
   CommentService,
 } = require(`../data-service`);
 
-const app = new Router();
-
-(async () => {
-  const mockData = await getMockData();
-
-  article(app, new ArticleService(mockData), new CommentService(mockData));
-  category(app, new CategoryService(mockData));
-  search(app, new SearchService(mockData));
-
-})();
-
-module.exports = app;
+module.exports = {
+  article,
+  category,
+  search,
+  CategoryService,
+  SearchService,
+  ArticleService,
+  CommentService,
+  getMockData,
+};

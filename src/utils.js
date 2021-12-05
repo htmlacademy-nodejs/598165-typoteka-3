@@ -12,8 +12,8 @@ const getRandomInt = (min, max) => {
 const shuffle = (array) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
-    const randomPostion = Math.floor(Math.random() * i);
-    [shuffled[i], shuffled[randomPostion]] = [shuffled[randomPostion], shuffled[i]];
+    const randomPosition = Math.floor(Math.random() * i);
+    [shuffled[i], shuffled[randomPosition]] = [shuffled[randomPosition], shuffled[i]];
   }
 
   return shuffled;
@@ -28,10 +28,18 @@ const checkFileType = (file) => {
   return allowedTypes.test(fileExtension.toLowerCase());
 };
 
+const asyncHandler = (callback) => {
+  return function (req, res, next) {
+    callback(req, res, next)
+      .catch(next);
+  };
+};
+
 module.exports = {
   getRandomInt,
   shuffle,
   ensureArray,
-  checkFileType
+  checkFileType,
+  asyncHandler,
 };
 

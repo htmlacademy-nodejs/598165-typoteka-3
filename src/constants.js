@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports.MOCK_FILE = `mocks.json`;
+const MOCK_FILE = `mocks.json`;
 
-module.exports.DEFAULT_COMMAND = `--help`;
-module.exports.USER_ARGV_INDEX = 2;
-module.exports.HttpCode = {
+const DEFAULT_COMMAND = `--help`;
+const USER_ARGV_INDEX = 2;
+const HttpCode = {
   OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
@@ -13,12 +13,22 @@ module.exports.HttpCode = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 };
-module.exports.ExitCode = {
+const ExitCode = {
   error: 1,
   success: 0,
 };
-module.exports.API_PREFIX = `/api`;
-module.exports.Env = {
+const API_PREFIX = `/api`;
+const Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
+};
+
+module.exports = {
+  MOCK_FILE,
+  DEFAULT_COMMAND,
+  USER_ARGV_INDEX,
+  HttpCode,
+  ExitCode,
+  API_PREFIX,
+  Env,
 };

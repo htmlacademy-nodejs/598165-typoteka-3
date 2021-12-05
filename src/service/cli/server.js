@@ -1,16 +1,33 @@
 'use strict';
 
 const express = require(`express`);
-const routes = require(`../api`);
-const {getLogger} = require(`../lib/logger`);
-const sequelize = require(`../lib/sequelize`);
+const {Router} = require(`express`);
 
+const {
+  article, category, search,
+  ArticleService, CommentService, CategoryService, SearchService,
+  getMockData
+} = require(`../api`);
+
+const {getLogger} = require(`../lib/logger`);
+const {getSequelize} = require(`../lib/sequelize`);
 
 const {HttpCode, API_PREFIX, ExitCode} = require(`../../constants`);
 const DEFAULT_PORT = process.env.PORT || 3000;
 
 const app = express();
 const logger = getLogger({name: `api`});
+const routes = new Router();
+
+(async () => {
+  const mockData = await getMockData();
+
+  article(routes, new ArticleService(mockData), new CommentService(mockData));
+  category(routes, new CategoryService(mockData));
+  search(routes, new SearchService(mockData));
+
+})();
+
 
 app.use(express.json());
 
@@ -38,6 +55,7 @@ app.use((err, _req, _res, _next) => {
 module.exports = {
   name: `--server`,
   async run(args) {
+    const sequelize = getSequelize();
     try {
       logger.info(`Trying to connect to the database...`);
       await sequelize.authenticate();
