@@ -8,22 +8,14 @@ const {asyncHandler: ash} = require(`../../utils`);
 const myRouter = new Router();
 
 myRouter.get(`/`, ash(async (req, res) => {
-  const articles = await api.getArticles();
+  const articles = await api.getArticles(true);
   res.render(`my-articles`, {articles});
 }));
 
 myRouter.get(`/comments`, ash(async (req, res) => {
-  const articles = await api.getArticles();
+  const article = await api.getArticle(1, true);
   const author = `Александр Петров`;
-  const comments = articles
-    .reduce((acc, article) => {
-      acc = acc.concat(article.comments
-        .map((comment) => ({...comment, articleTitle: article.title})));
-      return acc;
-    }, [])
-    .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
-
-  res.render(`comments`, {comments, author});
+  res.render(`comments`, {article, author});
 }));
 
 module.exports = myRouter;

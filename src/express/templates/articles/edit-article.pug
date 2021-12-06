@@ -11,11 +11,11 @@ block content
                 form(action='#' method='POST')
                   .new-publication__date-block
                     label(for='new-publication-date' aria-label='Календарь')
-                    input#new-publication-date(type='text' name='login' placeholder=`${new Date(article.createdDate).toLocaleDateString()}`)
-              button.new-publication__button.button.button--colored(type='submit') Опубликовать
+                    input#new-publication-date(type='text' name='login' placeholder=`${new Date(article.createdAt).toLocaleDateString()}`)
+              button.new-publication__button.button.button--colored(type='submit' form='edit-form') Опубликовать
             button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
             .new-publication__form.form
-              form(action='#' method='get')
+              form#edit-form(action='/articles/edit' method='PUT' enctype='multipart/form-data')
                 .form__wrapper.form__wrapper--intro
                   .form__field
                     label
@@ -30,7 +30,7 @@ block content
                     button.button.button--transparent Удалить
                   div(style="padding-top: 30px")
                     each category, i in categories
-                      - const isChecked = article.category.includes(category)
+                      - const isChecked = article.categories.some((it) => it.name === category.name)
                       .new-publication__checkbox.new-publication__checkbox--auto
                         input(
                           id=`checkbox-${i}`
@@ -38,7 +38,7 @@ block content
                           name=`checkbox-${i}`
                           checked=isChecked
                           )
-                        label(for=`checkbox-${i}`) #{category}
+                        label(for=`checkbox-${i}`) #{category.name}
                     a.new-publication__form-link.button.button--transparent(href='/categories') Добавить категорию
                 .form__wrapper.form__wrapper--text
                   .form__field.form__field--publication-text
@@ -48,7 +48,7 @@ block content
                   .form__field.form__field--publication-text
                     label
                       textarea(rows='5' placeholder='Полный текст публикации')
-                        | #{article.fullText.join('\n\n')}
+                        | #{article.fullText}
         .modal__overlay
 
 block scripts

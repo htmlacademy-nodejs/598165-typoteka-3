@@ -2,18 +2,19 @@
 
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
+const {asyncHandler: ash} = require(`../../utils`);
 
 module.exports = (app, service) => {
   const route = new Router();
   app.use(`/search`, route);
 
-  route.get(`/`, (req, res) => {
+  route.get(`/`, ash(async (req, res) => {
     const {query = ``} = req.query;
     if (!query) {
       return res.status(HttpCode.BAD_REQUEST).json([]);
     }
 
-    const searchResults = service.findAll(query);
+    const searchResults = await service.findAll(query);
 
     const searchStatus =
       searchResults.length > 0
@@ -22,5 +23,5 @@ module.exports = (app, service) => {
 
     return res.status(searchStatus)
       .json(searchResults);
-  });
+  }));
 };

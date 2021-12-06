@@ -5,20 +5,22 @@ const {HttpCode} = require(`../../constants`);
 const articleValidator = require(`../middleware/article-validator`);
 const articleExists = require(`../middleware/article-exists`);
 const commentsValidator = require(`../middleware/comments-validator`);
-
+const {asyncHandler: ash} = require(`../../utils`);
 
 module.exports = (app, articleService, commentService) => {
   const route = new Router();
   app.use(`/articles`, route);
 
-  route.get(`/`, (req, res) => {
-    const articles = articleService.findAll();
-    res.status(HttpCode.OK).json(articles);
-  });
+  route.get(`/`, ash(async (req, res) => {
 
-  route.get(`/:articleId`, (req, res) => {
+    const articles = await articleService.findAll({comments: true});
+    return res.status(HttpCode.OK).json(articles);
+  }));
+
+  route.get(`/:articleId`, ash(async (req, res) => {
+    const {comments} = req.query;
     const {articleId} = req.params;
-    const article = articleService.findOne(articleId);
+    const article = await articleService.findOne(articleId, comments);
 
     if (!article) {
       return res.status(HttpCode.NOT_FOUND)
@@ -27,69 +29,72 @@ module.exports = (app, articleService, commentService) => {
 
     return res.status(HttpCode.OK)
       .json(article);
-  });
+  }));
 
-  route.post(`/`, articleValidator, (req, res) => {
-    const article = articleService.create(req.body);
+  route.post(`/`, articleValidator, ash(async (req, res) => {
+    const article = await articleService.create(req.body);
     return res.status(HttpCode.CREATED)
       .json(article);
-  });
+  }));
 
-  route.put(`/:articleId`, articleValidator, (req, res) => {
+  route.put(`/:articleId`, articleValidator, ash(async (req, res) => {
     const {articleId} = req.params;
-    const oldArticle = articleService.findOne(articleId);
+    const oldArticle = await articleService.findOne(articleId);
 
     if (!oldArticle) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Article with ID ${articleId} wasn't found`);
     }
 
-    const updatedArticle = articleService.update(articleId, req.body);
+    const isUpdated = articleService.update(articleId, req.body);
+
+    if (!isUpdated) {
+      return res.status(HttpCode.NOT_FOUND).send(`Article with id ${articleId} wasn't found`);
+    }
 
     return res.status(HttpCode.OK)
-      .json(updatedArticle);
-  });
+      .send(`Updated`);
+  }));
 
-  route.delete(`/:articleId`, (req, res) => {
+  route.delete(`/:articleId`, ash(async (req, res) => {
     const {articleId} = req.params;
-    const deletedArticle = articleService.drop(articleId);
+    const isDeleted = await articleService.drop(articleId);
 
-    if (!deletedArticle) {
+    if (!isDeleted) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Not found`);
     }
 
     return res.status(HttpCode.OK)
-      .json(deletedArticle);
-  });
+      .send(`Deleted`);
+  }));
 
-  route.get(`/:articleId/comments`, articleExists(articleService), (req, res) => {
-    const {article} = res.locals;
-    const comments = commentService.findAll(article);
+  route.get(`/:articleId/comments`, articleExists(articleService), ash(async (req, res) => {
+    const {articleId} = req.params;
+    const comments = await commentService.findAll(articleId);
 
-    res.status(HttpCode.OK)
+    return res.status(HttpCode.OK)
       .json(comments);
-  });
+  }));
 
-  route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), (req, res) => {
-    const {article} = res.locals;
+  route.delete(`/:articleId/comments/:commentId`, articleExists(articleService), ash(async (req, res) => {
     const {commentId} = req.params;
-    const deletedComment = commentService.drop(article, commentId);
+    const isDeleted = await commentService.drop(commentId);
 
-    if (!deletedComment) {
+    if (!isDeleted) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Not found`);
     }
 
     return res.status(HttpCode.OK)
-      .json(deletedComment);
-  });
+      .send(`Deleted`);
+  }));
 
-  route.post(`/:articleId/comments`, [articleExists(articleService), commentsValidator], (req, res) => {
+  route.post(`/:articleId/comments`, [articleExists(articleService), commentsValidator], ash(async (req, res) => {
     const {article} = res.locals;
-    const comment = commentService.create(article, req.body);
+    const comment = await commentService.create(article, req.body);
 
     return res.status(HttpCode.CREATED)
       .json(comment);
-  });
+  }));
 };

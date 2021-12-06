@@ -9,23 +9,22 @@ block content
         .post__wrapper
           .post__head
             a.post__backwards.button.button--backwards(href='#') Назад
-            - const date = new Date(article.createdDate)
+            - const date = new Date(article.createdAt)
             time.post__date(datetime=date.toISOString())
               +formatDate(date)
             h2.post__title.title.title--main #{article.title}
             ul.post__themes.themes
-              each category in article.category
+              each category in article.categories
                 li.themes__item
                   a.themes__item-link(href='#')
-                    | #{category}
+                    | #{category.name}
                     sup 88
                   button.themes__remove-btn(type='button') Удалить категорию
           if article.picture
             .post__picture
               img(src=`/img/${article.picture}` width=940 height=490 alt=`${article.title}`)
           .post__text
-            each paragraph in article.fullText
-              p #{paragraph}
+            p #{article.fullText}
 
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
@@ -38,7 +37,7 @@ block content
               .comments__text
                 .comments__head
                   p Евгений Петров •
-                  - const date = new Date(comment.createdDate);
+                  - const date = new Date(comment.createdAt);
                   time.comments__date(datetime=date.toISOString())
                     +formatDate(date)
                 p.comments__message #{comment.text}

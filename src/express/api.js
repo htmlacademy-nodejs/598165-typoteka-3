@@ -13,12 +13,12 @@ class API {
     });
   }
 
-  getArticles() {
-    return this._load(`/articles`);
+  getArticles({comments}) {
+    return this._load(`/articles`, {params: {comments}});
   }
 
-  getArticle(id) {
-    return this._load(`/articles/${id}`);
+  getArticle(id, comments) {
+    return this._load(`/articles/${id}`, {params: {comments}});
   }
 
   search(query) {

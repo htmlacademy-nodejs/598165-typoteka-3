@@ -8,7 +8,7 @@ const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const articlesRouter = new Router();
 
 articlesRouter.get(`/category/:id`, ash(async (req, res) => {
-  const articles = await api.getArticles();
+  const articles = await api.getArticles(true);
   res.render(`category-articles`, {articles});
 }));
 
@@ -24,7 +24,7 @@ articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
     title: body.title,
     createdDate: new Date(year, month - 1, day),
     announce: body.announce,
-    fullText: body[`full-text`].split(/[\r?\n]+/),
+    fullText: body[`full-text`],
     category: body.categories ? ensureArray(body.categories) : [],
     picture: file ? file.filename : ``
   };
@@ -46,7 +46,7 @@ articlesRouter.get(`/edit/:id`, ash(async (req, res) => {
 
 articlesRouter.get(`/:id`, ash(async (req, res) => {
   const {id} = req.params;
-  const article = await api.getArticle(id);
+  const article = await api.getArticle(id, true);
   res.render(`articles/article`, {article});
 }));
 

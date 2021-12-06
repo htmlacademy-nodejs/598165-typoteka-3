@@ -3,12 +3,12 @@ section.main-page__list.preview
   ul.preview__list
     each article in articles
       li.preview__item(class = article.picture ? `` : `preview__item--noimage`)
-        ul.preview__breadcrumbs
-          each category in article.category
+        ul.preview__breadcrumbs(style=`flex-wrap: wrap;`)
+          each category in article.categories
             li.preview__breadcrumbs-item
-              a.preview__breadcrumbs-link(href='#') #{category}
+              a.preview__breadcrumbs-link(href='#') #{category.name}
         +insertArticleImg(article)
-        - const date = new Date(article.createdDate);
+        - const date = new Date(article.createdAt);
         time.preview__time(datetime=`${date.toISOString()}`)
           +formatDate(date)
         h3.preview__name

@@ -7,7 +7,7 @@ block content
       ul.notes__list
         each article in articles
           li.notes__list-item
-            - const date = new Date(article.createdDate)
+            - const date = new Date(article.createdAt)
             time.notes__item-time(datetime=date.toISOString())
               +formatDate(date)
             a.notes__item-text(href=`/articles/${article.id}`) #{article.title}

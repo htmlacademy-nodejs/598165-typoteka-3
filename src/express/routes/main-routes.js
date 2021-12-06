@@ -6,7 +6,7 @@ const api = require(`../api`).getApi();
 const {asyncHandler: ash} = require(`../../utils`);
 
 mainRouter.get(`/`, ash(async (req, res) => {
-  const articles = await api.getArticles();
+  const articles = await api.getArticles({comments: true});
   res.render(`main`, {articles});
 }));
 

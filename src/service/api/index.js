@@ -4,14 +4,14 @@ const article = require(`./article`);
 const category = require(`./category`);
 const search = require(`./search`);
 
-const getMockData = require(`../lib/get-mock-data`);
-
 const {
   CategoryService,
   SearchService,
   ArticleService,
   CommentService,
 } = require(`../data-service`);
+
+const defineModels = require(`../models`);
 
 module.exports = {
   article,
@@ -21,5 +21,5 @@ module.exports = {
   SearchService,
   ArticleService,
   CommentService,
-  getMockData,
+  defineModels,
 };

@@ -35,9 +35,9 @@ block content
                         id=`checkbox-${i}`
                         type='checkbox'
                         name=`categories`
-                        value=`${category}`
+                        value=`${category.name}`
                       )
-                      label(for=`checkbox-${i}`) #{category}
+                      label(for=`checkbox-${i}`) #{category.name}
                   a.new-publication__form-link.button.button--transparent(href='/categories') Добавить
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text

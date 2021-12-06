@@ -13,8 +13,8 @@ block content
           if (results && results.length)
             each result in results
               .search__result
-                time.search__date(datetime=`${new Date(result.createdDate).toISOString()}`)
-                  +formatDate(new Date(result.createdDate))
+                time.search__date(datetime=`${new Date(result.createdAt).toISOString()}`)
+                  +formatDate(new Date(result.createdAt))
                 a.search__link(href=`articles/${result.id}`)
                   | #{result.title}
         if (results && !results.length)

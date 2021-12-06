@@ -1,34 +1,29 @@
 'use strict';
 
-const crypto = require(`crypto`);
-
 class CommentService {
-
-  findAll(article) {
-    return article.comments;
+  constructor(sequelize) {
+    this._Comment = sequelize.models.Comment;
   }
 
-  create(article, comment) {
-    const newComment = Object.assign({
-      id: crypto.randomUUID(),
-    }, comment);
-
-    article.comments.push(newComment);
-    return comment;
+  findAll(articleId) {
+    return this._Comment.findAll({
+      where: {articleId},
+      raw: true
+    });
   }
 
-  drop(article, commentId) {
+  create(articleId, comment) {
+    return this._Comment.create(({
+      articleId,
+      ...comment
+    }));
+  }
 
-    const dropComment = article.comments
-      .find((comment) => comment.id === commentId);
-
-    if (!dropComment) {
-      return null;
-    }
-
-    article.comments = article.comments.filter((comment) => comment.id !== commentId);
-
-    return dropComment;
+  async drop(id) {
+    const deletedRows = await this._Comment.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
   }
 }
 

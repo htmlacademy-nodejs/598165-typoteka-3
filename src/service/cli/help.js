@@ -7,11 +7,10 @@ const helpMessage = `Гайд:
 Команды:
 --version: выводит номер версии
 --help: печатает этот текст
---generate <count> формирует файл mocks.json
+--filldb <count> заполняет базу данных
 --fill <count> формирует файл fill-db.sql
 --server <port> запускает http-сервер
-
-    `;
+`;
 
 module.exports = {
   name: `--help`,

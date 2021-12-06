@@ -21,6 +21,20 @@ const shuffle = (array) => {
 
 const ensureArray = (arg) => Array.isArray(arg) ? arg : [arg];
 
+const getRandomSubarray = (array) => {
+  array = array.slice();
+  let count = getRandomInt(1, array.length - 1);
+  const result = [];
+  while (count--) {
+    result.push(...array.splice(getRandomInt(0, array.length - 1), 1));
+  }
+  return result;
+};
+
+const getRandomFromArray = (array) => {
+  return array[getRandomInt(0, array.length - 1)];
+};
+
 const checkFileType = (file) => {
   const fileExtension = path.extname(file.originalname);
   const allowedTypes = /jpeg|jpg|png/;
@@ -39,6 +53,8 @@ module.exports = {
   getRandomInt,
   shuffle,
   ensureArray,
+  getRandomSubarray,
+  getRandomFromArray,
   checkFileType,
   asyncHandler,
 };

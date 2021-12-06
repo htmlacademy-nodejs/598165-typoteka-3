@@ -6,7 +6,7 @@ const {Router} = require(`express`);
 const {
   article, category, search,
   ArticleService, CommentService, CategoryService, SearchService,
-  getMockData
+  defineModels
 } = require(`../api`);
 
 const {getLogger} = require(`../lib/logger`);
@@ -18,16 +18,6 @@ const DEFAULT_PORT = process.env.PORT || 3000;
 const app = express();
 const logger = getLogger({name: `api`});
 const routes = new Router();
-
-(async () => {
-  const mockData = await getMockData();
-
-  article(routes, new ArticleService(mockData), new CommentService(mockData));
-  category(routes, new CategoryService(mockData));
-  search(routes, new SearchService(mockData));
-
-})();
-
 
 app.use(express.json());
 
@@ -56,6 +46,14 @@ module.exports = {
   name: `--server`,
   async run(args) {
     const sequelize = getSequelize();
+    defineModels(sequelize);
+
+    (() => {
+      article(routes, new ArticleService(sequelize), new CommentService(sequelize));
+      category(routes, new CategoryService(sequelize));
+      search(routes, new SearchService(sequelize));
+    })();
+
     try {
       logger.info(`Trying to connect to the database...`);
       await sequelize.authenticate();
@@ -80,3 +78,4 @@ module.exports = {
     }
   }
 };
+
