@@ -48,11 +48,9 @@ module.exports = {
     const sequelize = getSequelize();
     defineModels(sequelize);
 
-    (() => {
-      article(routes, new ArticleService(sequelize), new CommentService(sequelize));
-      category(routes, new CategoryService(sequelize));
-      search(routes, new SearchService(sequelize));
-    })();
+    article(routes, new ArticleService(sequelize), new CommentService(sequelize));
+    category(routes, new CategoryService(sequelize));
+    search(routes, new SearchService(sequelize));
 
     try {
       logger.info(`Trying to connect to the database...`);

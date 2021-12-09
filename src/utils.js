@@ -43,9 +43,12 @@ const checkFileType = (file) => {
 };
 
 const asyncHandler = (callback) => {
-  return function (req, res, next) {
-    callback(req, res, next)
-      .catch(next);
+  return async function (req, res, next) {
+    try {
+      return await callback(req, res);
+    } catch (err) {
+      return next(err);
+    }
   };
 };
 
