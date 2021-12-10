@@ -1,31 +1,18 @@
 section.main-page__theme-list
   h2.visually-hidden Список тем
   ul.themes
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | Автомобили
-        sup 88
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | Удаленная работа
-        sup 13
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | Бизнес
-        sup 13
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | Путешествия
-        sup 13
-    li.themes__item
-      a.themes__item-link.themes__item-link--padding(href='/articles/category/1')
-        | Дизайн и обустройство
-        sup 13
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | Производство игрушек
-        sup 22
-    li.themes__item
-      a.themes__item-link(href='/articles/category/1')
-        | UX & UI
-        sup 22
+    each category, i in categories
+      li.themes__item
+        -
+          const linkAttributes = {
+            class: `themes__item-link`,
+            href: `/articles/category/${category.id}`
+          }
+          if (category.id == id) {
+            linkAttributes.class += ` themes__item-link--active`
+            linkAttributes.href = null
+          }
+
+        a&attributes(linkAttributes)
+          | #{category.name}
+          sup #{category.count }

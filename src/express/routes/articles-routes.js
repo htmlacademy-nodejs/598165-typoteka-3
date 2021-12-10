@@ -8,8 +8,12 @@ const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const articlesRouter = new Router();
 
 articlesRouter.get(`/category/:id`, ash(async (req, res) => {
-  const articles = await api.getArticles(true);
-  res.render(`category-articles`, {articles});
+  const {id} = req.params;
+  const [articles, categories] = await Promise.all([
+    api.getArticles({comments: true}),
+    api.getCategories(true)
+  ]);
+  res.render(`main`, {articles, categories, id});
 }));
 
 articlesRouter.get(`/add`, ash(async (req, res) => {
