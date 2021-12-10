@@ -50,3 +50,5 @@ block content
             b.last__list-name Игорь Шманский
             a.last__list-link(href='#') Что-то все электрокары в последнее время все на одно лицо делаются))
     include partials/articles-list
+    .preview__toggle-wrapper
+      +pagination(page, totalPages, 1, `?`)

@@ -11,11 +11,38 @@ block mixins
           alt=`${article.title}`)
 
   mixin formatDate(date)
-      - const fullYear = date.getFullYear()
-      - const month = (date.getMonth() + 1).toString().padStart(2, `0`)
-      - const day = date.getDate().toString().padStart(2, `0`);
-      - const hours = date.getHours().toString().padStart(2, `0`);
-      - const minutes = date.getMinutes().toString().padStart(2, `0`);
+    - const fullYear = date.getFullYear()
+    - const month = (date.getMonth() + 1).toString().padStart(2, `0`)
+    - const day = date.getDate().toString().padStart(2, `0`);
+    - const hours = date.getHours().toString().padStart(2, `0`);
+    - const minutes = date.getMinutes().toString().padStart(2, `0`);
 
-      | #{`${day}.${month}.${fullYear}, ${hours}:${minutes}`}
+    | #{`${day}.${month}.${fullYear}, ${hours}:${minutes}`}
 
+  mixin pagination(page, totalPages, width, prefix)
+    -
+      let start = page - width;
+      let end = page + width;
+
+      if (start < 1) {
+        end += 1 - start;
+        start = 1;
+      }
+      if (end > totalPages) {
+        start -= end - totalPages;
+        end = totalPages;
+      }
+      if (start < 1) {
+        start = 1;
+      }
+      let i = start - 1;
+    ul.preview__pagination.pagination(style={"justify-content": "center"})
+      if start > 1
+        li
+          a.pagination__button.button.button--backwards.button--disabled(href=`${prefix}page=${page - 1}` aria-label='Страница назад') Назад
+      while i++ < end
+        li.pagination__item(class={"pagination__item--active": i === page})
+          a(href=i !== page ? `${prefix}page=${i}` : null)= i
+      if end < totalPages
+        li
+          a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label='Страница вперед') Вперед
