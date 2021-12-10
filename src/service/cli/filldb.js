@@ -11,10 +11,9 @@ const {
 } = require(`../../utils`);
 const {ExitCode} = require(`../../constants`);
 
-const Alias = require(`../models/alias`);
-const defineModels = require(`../data-service`);
 const {logger} = require(`../lib/logger`);
 const {getSequelize} = require(`../lib/sequelize`);
+const initDatabase = require(`../lib/init-db`);
 
 const DEFAULT_COUNT = 1;
 
@@ -43,7 +42,7 @@ const USERS = [
 ];
 
 const generateArticles = (count, data) => {
-  const {sentences, titles, categories, comments} = data;
+  const {sentences, titles, categories, comments, users} = data;
   return Array(count)
     .fill({})
     .map(() => {
@@ -60,6 +59,7 @@ const generateArticles = (count, data) => {
         categories: getRandomSubarray(categories),
         comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
         picture: getRandomFromArray(PICTURES),
+        user: getRandomFromArray(users)
       };
     });
 };
@@ -100,36 +100,18 @@ module.exports = {
     }
     logger.info(`A connection to the database has been established`);
 
-    const {Category, Article, User} = defineModels(sequelize);
-    await sequelize.sync({force: true});
-
     const [sentences, titles, categories, comments] = await Promise.all([
       readContent(FILE_SENTENCES_PATH),
       readContent(FILE_TITLES_PATH),
       readContent(FILE_CATEGORIES_PATH),
       readContent(FILE_COMMENTS_PATH),
     ]);
-    const categoryModels = await Category.bulkCreate(categories.map((item) => ({name: item})));
-    const userModels = await User.bulkCreate(USERS);
-    const mockData = {sentences, titles, categories: categoryModels, comments};
 
     const [count] = args;
     const articlesCount = parseInt(count, 10) || DEFAULT_COUNT;
-
+    const mockData = {sentences, titles, categories, comments, users: USERS};
     const articles = generateArticles(articlesCount, mockData);
-
-    const articlesPromises = articles.map(async (article) => {
-      const articleModel = await Article.create(article, {include: Alias.COMMENTS});
-      await getRandomFromArray(userModels).addArticle(articleModel);
-      await articleModel.addCategories(article.categories);
-
-      const commentModels = await articleModel.getComments();
-      for (const commentModel of commentModels) {
-        await articleModel.addComment(commentModel);
-        await getRandomFromArray(userModels).addComment(commentModel);
-      }
-    });
-
-    await Promise.all(articlesPromises);
+    console.log(categories);
+    return initDatabase(sequelize, {articles, categories, users: USERS});
   }
 };
