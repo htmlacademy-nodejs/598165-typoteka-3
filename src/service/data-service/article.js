@@ -40,13 +40,7 @@ class ArticleService {
     return articles.map((article) => article.get());
   }
 
-  async findPage({limit, offset, categoryId}) {
-    if (categoryId) {
-      const category = this._Category.findByPk(categoryId);
-      const articles = await category.getArticles({row: true});
-      console.log(articles);
-      return articles;
-    }
+  async findPage({limit, offset}) {
     const {count, rows} = await this._Article.findAndCountAll({
       limit,
       offset,

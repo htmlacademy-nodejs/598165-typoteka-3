@@ -25,6 +25,13 @@ const Env = {
 
 const ARTICLES_PER_PAGE = 8;
 
+const HttpMethod = {
+  GET: `GET`,
+  POST: `POST`,
+  PUT: `PUT`,
+  DELETE: `DELETE`
+};
+
 module.exports = {
   MOCK_FILE,
   DEFAULT_COMMAND,
@@ -34,4 +41,5 @@ module.exports = {
   API_PREFIX,
   Env,
   ARTICLES_PER_PAGE,
+  HttpMethod,
 };

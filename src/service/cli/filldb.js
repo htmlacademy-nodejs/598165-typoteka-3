@@ -111,7 +111,6 @@ module.exports = {
     const articlesCount = parseInt(count, 10) || DEFAULT_COUNT;
     const mockData = {sentences, titles, categories, comments, users: USERS};
     const articles = generateArticles(articlesCount, mockData);
-    console.log(categories);
     return initDatabase(sequelize, {articles, categories, users: USERS});
   }
 };

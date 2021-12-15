@@ -46,7 +46,6 @@ module.exports = (req, res, next) => {
 
   if (error) {
     const errorMessages = error.details.reduce((acc, it) => Object.assign(acc, {[it.path]: it.message}), {});
-    console.log(errorMessages);
     return res.status(HttpCode.BAD_REQUEST)
       .send(JSON.stringify(errorMessages));
   }

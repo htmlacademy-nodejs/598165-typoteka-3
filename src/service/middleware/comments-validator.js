@@ -19,8 +19,10 @@ module.exports = (req, res, next) => {
   const {error} = schema.validate(comment, {abortEarly: false});
 
   if (error) {
+    const errorMessages = error.details
+      .reduce((acc, it) => Object.assign(acc, {[it.path]: it.message}), {});
     return res.status(HttpCode.BAD_REQUEST)
-      .send(error.details.map((err) => err.message).join(`\n`));
+      .send(JSON.stringify(errorMessages));
   }
 
   return next();

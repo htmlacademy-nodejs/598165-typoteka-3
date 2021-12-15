@@ -52,7 +52,7 @@ block mixins
     if errors
       - const errorsMessages = Object.values(errors)
       .form__validation-error
-        p.form__error-message При публикации произошли ошибки:
+        p.form__error-message Произошли ошибки:
         ul.form__errors
           each message in errorsMessages
             li.form__error= message

@@ -5,6 +5,8 @@ const {HttpCode} = require(`../../constants`);
 const articleValidator = require(`../middleware/article-validator`);
 const articleExists = require(`../middleware/article-exists`);
 const commentsValidator = require(`../middleware/comments-validator`);
+const routeParamsValidator = require(`../middleware/route-params-vallidator`);
+
 const {asyncHandler: ash} = require(`../../utils`);
 
 module.exports = (app, articleService, commentService) => {
@@ -95,9 +97,13 @@ module.exports = (app, articleService, commentService) => {
       .send(`Deleted`);
   }));
 
-  route.post(`/:articleId/comments`, [articleExists(articleService), commentsValidator], ash(async (req, res) => {
-    const {article} = res.locals;
-    const comment = await commentService.create(article, req.body);
+  route.post(`/:articleId/comments`, [
+    routeParamsValidator,
+    articleExists(articleService),
+    commentsValidator
+  ], ash(async (req, res) => {
+    const {articleId} = req.params;
+    const comment = await commentService.create(articleId, req.body);
 
     return res.status(HttpCode.CREATED)
       .json(comment);

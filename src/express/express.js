@@ -28,6 +28,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.urlencoded({extended: false}));
+
 app.use(`/articles`, articlesRouter);
 app.use(`/my`, myRouter);
 app.use(`/`, mainRoutes);
