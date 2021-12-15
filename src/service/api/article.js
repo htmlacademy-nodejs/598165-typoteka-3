@@ -12,10 +12,10 @@ module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
   route.get(`/`, ash(async (req, res) => {
-    const {offset, limit, comments} = req.query;
+    const {offset, limit, categoryId, comments} = req.query;
     let result;
     if (limit || offset) {
-      result = await articleService.findPage({limit, offset});
+      result = await articleService.findPage({limit, offset, categoryId});
     } else {
       result = await articleService.findAll({comments});
     }

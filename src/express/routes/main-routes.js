@@ -5,8 +5,7 @@ const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {asyncHandler: ash} = require(`../../utils`);
 
-const ARTICLES_PER_PAGE = 8;
-
+const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
 mainRouter.get(`/`, ash(async (req, res) => {
   let {page = 1} = req.query;

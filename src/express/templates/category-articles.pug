@@ -1,7 +1,12 @@
 extends layout.pug
 
 block content
+  -
+    let currentCategoryId = currentCategory.id;
+    let articles = articlesInCategory;
   main.articles-category
-    h1 Бизнес
+    h1 #{currentCategory.name}
     include partials/categories-list
     include partials/articles-list
+    .preview__toggle-wrapper
+      +pagination(page, totalPages, 1, `?`)

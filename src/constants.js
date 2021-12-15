@@ -23,6 +23,8 @@ const Env = {
   PRODUCTION: `production`
 };
 
+const ARTICLES_PER_PAGE = 8;
+
 module.exports = {
   MOCK_FILE,
   DEFAULT_COMMAND,
@@ -31,4 +33,5 @@ module.exports = {
   ExitCode,
   API_PREFIX,
   Env,
+  ARTICLES_PER_PAGE,
 };

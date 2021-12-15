@@ -13,9 +13,9 @@ class API {
     });
   }
 
-  getArticles({offset, limit, comments}) {
+  getArticles({offset, limit, categoryId, comments}) {
     return this._load(`/articles`, {
-      params: {offset, limit, comments}
+      params: {offset, limit, categoryId, comments}
     });
   }
 
@@ -31,6 +31,10 @@ class API {
     return this._load(`/category`, {params: {count}});
   }
 
+  getArticlesInCategory({categoryId, limit, offset}) {
+    return this._load(`/category/${categoryId}`, {params: {limit, offset}});
+  }
+
   createArticle(data) {
     return this._load(`/articles`, {
       method: `POST`,
@@ -42,6 +46,7 @@ class API {
     const response = await this._http.request({url, ...options});
     return response.data;
   }
+
 }
 
 const defaultAPI = new API(defaultUrl, TIMEOUT);

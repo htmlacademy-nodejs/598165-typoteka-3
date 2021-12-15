@@ -14,4 +14,19 @@ module.exports = (app, service) => {
     res.status(HttpCode.OK)
       .json(categories);
   }));
+
+  route.get(`/:categoryId`, ash(async (req, res) => {
+    const {categoryId} = req.params;
+    const {limit, offset} = req.query;
+
+    const category = await service.findOne(categoryId);
+    const {count, articlesInCategory} = await service.findPage(categoryId, limit, offset);
+
+    res.status(HttpCode.OK)
+      .json({
+        category,
+        count,
+        articlesInCategory
+      });
+  }));
 };

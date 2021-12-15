@@ -4,16 +4,33 @@ const {Router} = require(`express`);
 const api = require(`../api`).getApi();
 const {upload} = require(`../upload`);
 const {ensureArray, asyncHandler: ash} = require(`../../utils`);
+const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
 const articlesRouter = new Router();
 
-articlesRouter.get(`/category/:id`, ash(async (req, res) => {
-  const {id} = req.params;
-  const [articles, categories] = await Promise.all([
-    api.getArticles({comments: true}),
-    api.getCategories(true)
+articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
+  const {categoryId} = req.params;
+
+  let {page = 1} = req.query;
+  page = +page;
+  const limit = ARTICLES_PER_PAGE;
+  const offset = (page - 1) * ARTICLES_PER_PAGE;
+
+  const [categories, {category, count, articlesInCategory}] = await Promise.all([
+    api.getCategories(true),
+    api.getArticlesInCategory({categoryId, limit, offset}),
   ]);
-  res.render(`main`, {articles, categories, id});
+
+  const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
+
+  res.render(`category-articles`, {
+    categories,
+    count,
+    currentCategory: category,
+    articlesInCategory,
+    page,
+    totalPages,
+  });
 }));
 
 articlesRouter.get(`/add`, ash(async (req, res) => {
