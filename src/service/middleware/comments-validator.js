@@ -1,16 +1,26 @@
 'use strict';
 
+const Joi = require(`joi`);
 const {HttpCode} = require(`../../constants`);
 
-const commentsKeys = [`text`];
+const ErrorCommentMessage = {
+  TEXT: `Комментарий содержит меньше 20 символов`,
+  USER_ID: `Некорректный идентификатор пользователя`,
+};
+const schema = Joi.object({
+  text: Joi.string().min(20).required().messages({
+    'string.min': ErrorCommentMessage.TEXT
+  })
+});
+
 
 module.exports = (req, res, next) => {
-  const keys = Object.keys(req.body);
-  const keysExists = commentsKeys.every((key) => keys.includes(key));
+  const comment = req.body;
+  const {error} = schema.validate(comment, {abortEarly: false});
 
-  if (!keysExists) {
+  if (error) {
     return res.status(HttpCode.BAD_REQUEST)
-      .send(`Bad request`);
+      .send(error.details.map((err) => err.message).join(`\n`));
   }
 
   return next();

@@ -6,10 +6,29 @@ html(lang='ru')
     meta(name='viewport' content='width=device-width,initial-scale=1')
     meta(name='Description' content='Личный блог Типотека')
     title Типотека
-    link(rel='preload' href='./fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
-    link(rel='preload' href='./fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
-    link(rel='preload' href='./fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
+    link(rel='preload' href='/fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='stylesheet' href='/css/style.min.css')
+    style.
+      .form__checkbox-field {
+        padding-top: 30px;
+        position: relative;
+      }
+
+      .form__field {
+        position: relative;
+      }
+
+      .field__validation-error {
+        position: absolute;
+        margin: 0;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        background-color: tomato;
+        color: white;
+      }
   body
     .wrapper
       include partials/header.pug

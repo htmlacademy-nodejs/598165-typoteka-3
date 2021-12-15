@@ -19,7 +19,9 @@ const shuffle = (array) => {
   return shuffled;
 };
 
-const ensureArray = (arg) => Array.isArray(arg) ? arg : [arg];
+const ensureArray = (arg) => Array.isArray(arg)
+  ? arg.map((it) => +it)
+  : [+arg];
 
 const getRandomSubarray = (array) => {
   array = array.slice();
@@ -52,6 +54,8 @@ const asyncHandler = (callback) => {
   };
 };
 
+const prepareErrors = (errors) => errors.response.data.split(`\n`);
+
 module.exports = {
   getRandomInt,
   shuffle,
@@ -60,5 +64,5 @@ module.exports = {
   getRandomFromArray,
   checkFileType,
   asyncHandler,
+  prepareErrors,
 };
-

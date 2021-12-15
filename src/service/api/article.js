@@ -36,11 +36,11 @@ module.exports = (app, articleService, commentService) => {
       .json(article);
   }));
 
-  route.post(`/`, articleValidator, ash(async (req, res) => {
+  route.post(`/`, articleValidator, async (req, res) => {
     const article = await articleService.create(req.body);
     return res.status(HttpCode.CREATED)
       .json(article);
-  }));
+  });
 
   route.put(`/:articleId`, articleValidator, ash(async (req, res) => {
     const {articleId} = req.params;

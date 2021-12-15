@@ -11,7 +11,6 @@ class CategoryService {
   }
 
   async findAll(withCount) {
-    console.log(`count`, withCount);
     if (withCount) {
       const result = await this._Category.findAll({
         attributes: [

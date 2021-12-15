@@ -1,6 +1,8 @@
 extends ../layout.pug
 
 block content
+  - const createdAt = new Date();
+
   main
     section.modal.modal--flex
       .popup.popup--new-publication.popup--flex
@@ -12,7 +14,7 @@ block content
               form(action='#' method='POST')
                 .new-publication__date-block
                   label(for='new-publication-date' aria-label='Календарь')
-                  input#new-publication-date(type='text' form='new-article' name='created-date')
+                  input#new-publication-date(type='text' form='new-article' name='created-date' value=`${createdAt.toLocaleDateString('ru-RU')}`)
             button.new-publication__button.button.button--colored(type='submit' form='new-article') Опубликовать
           button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
           .new-publication__form.form
@@ -21,31 +23,37 @@ block content
                 .form__field
                   label
                     input(type='text' placeholder='Заголовок' name='title' required)
+                  +insertErrorMessage('title', errors)
                 .form__field.form__field--post-image
                   label
                     input#image-name-field(type='text' placeholder='Фотография' readonly)
+                    +insertErrorMessage('picture', errors)
                   .form__image-loader.form__image-loader--publication
                     label
                       input.visually-hidden(type='file' name='picture')
                       | Обзор
-                div(style="padding-top: 30px")
-                  each category, i in categories
+                div.form__checkbox-field
+                  each category in categories
                     .new-publication__checkbox.new-publication__checkbox--auto
                       input(
-                        id=`checkbox-${i}`
+                        id=`checkbox-${category.id}`
                         type='checkbox'
                         name=`categories`
-                        value=`${category.name}`
+                        value=`${category.id}`
                       )
-                      label(for=`checkbox-${i}`) #{category.name}
+                      label(for=`checkbox-${category.id}`) #{category.name}
                   a.new-publication__form-link.button.button--transparent(href='/categories') Добавить
+                  +insertErrorMessage('categories', errors)
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='2' placeholder='Анонс публикации' name='announce')
+                    +insertErrorMessage('announce', errors)
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='5' placeholder='Полный текст публикации' name='full-text')
+                  +insertErrorMessage('fullText', errors)
+          +insertErrorMessageList(errors)
       .modal__overlay
 
 block scripts

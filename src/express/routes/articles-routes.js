@@ -40,21 +40,27 @@ articlesRouter.get(`/add`, ash(async (req, res) => {
 
 articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
   const {body, file} = req;
-  const [day, month, year] = body[`created-date`].split(`.`);
   const articleData = {
     title: body.title,
-    createdDate: new Date(year, month - 1, day),
     announce: body.announce,
     fullText: body[`full-text`],
-    category: body.categories ? ensureArray(body.categories) : [],
+    categories: body.categories ? ensureArray(body.categories) : [],
     picture: file ? file.filename : ``
   };
 
   try {
     await api.createArticle(articleData);
     res.redirect(`/my`);
-  } catch (error) {
-    res.redirect(`back`);
+  } catch (err) {
+    // const validationMessages = prepareErrors(errors);
+    const errors = err.response.data;
+
+    const categories = await getAddArticleData();
+
+    res.render(`articles/new-article`, {
+      categories,
+      errors,
+    });
   }
 }));
 
@@ -70,5 +76,9 @@ articlesRouter.get(`/:id`, ash(async (req, res) => {
   const article = await api.getArticle(id, true);
   res.render(`articles/article`, {article});
 }));
+
+function getAddArticleData() {
+  return api.getCategories();
+}
 
 module.exports = articlesRouter;

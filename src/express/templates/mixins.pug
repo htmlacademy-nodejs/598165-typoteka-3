@@ -46,3 +46,18 @@ block mixins
       if end < totalPages
         li
           a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label='Страница вперед') Вперед
+
+
+  mixin insertErrorMessageList(errors)
+    if errors
+      - const errorsMessages = Object.values(errors)
+      .form__validation-error
+        p.form__error-message При публикации произошли ошибки:
+        ul.form__errors
+          each message in errorsMessages
+            li.form__error= message
+
+  mixin insertErrorMessage(key, errors)
+    if errors
+      if key in errors
+        p.field__validation-error= errors[key]
