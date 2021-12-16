@@ -66,11 +66,12 @@ describe(`API returns an article with a given id`, () => {
 
 describe(`API create an article when data is valid`, () => {
   const newArticle = {
-    "title": `Борьба с прокрастинацией`,
+    "title": `Борьба с прокрастинацией с прокрастинацией`,
     "announce": `Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
     "fullText": `Это один из лучших рок-музыкантов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Золотое сечение — соотношение двух величин, гармоническая пропорция.`,
     "categories": [1, 2],
-    "picture": `picture.jpg`
+    "picture": `picture.jpg`,
+    "userId": 1
   };
   let app;
   let response;
@@ -91,11 +92,10 @@ describe(`API create an article when data is valid`, () => {
 
 describe(`API doesn't create an article with invalid data`, () => {
   const newArticle = {
-    "title": `Борьба с прокрастинацией`,
+    "title": `Борьба с прокрастинацией Борьба с прокрастинацией`,
     "announce": `Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
-    "fullText": `Это один из лучших рок-музыкантов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Золотое сечение — соотношение двух величин, гармоническая пропорция.`,
     "categories": [1, 2],
-    "picture": `picture.jpg`
+    "userId": 1
   };
 
   let app;
@@ -113,15 +113,52 @@ describe(`API doesn't create an article with invalid data`, () => {
         .expect(HttpCode.BAD_REQUEST);
     }
   });
+
+  test(`When a field type is wrong the response code is 400`, async () => {
+    const badArticles = [
+      {...newArticle, title: 1},
+      {...newArticle, announce: 1},
+      {...newArticle, fullText: 1},
+      {...newArticle, categories: `string`},
+      {...newArticle, picture: 1},
+      {...newArticle, userId: `string`},
+    ];
+
+    for (const badArticle of badArticles) {
+      await request(app)
+        .post(`/articles`)
+        .send(badArticle)
+        .expect(HttpCode.BAD_REQUEST);
+    }
+  });
+
+  test(`When a field value is wrong the response code is 400`, async () => {
+    const tooLong = new Array(1100).fill(`a`).join((``));
+
+    const badArticles = [
+      {...newArticle, title: `Too short`},
+      {...newArticle, announce: `Too short`},
+      {...newArticle, fullText: tooLong},
+      {...newArticle, categories: []},
+    ];
+
+    for (const badArticle of badArticles) {
+      await request(app)
+        .post(`/articles`)
+        .send(badArticle)
+        .expect(HttpCode.BAD_REQUEST);
+    }
+  });
 });
 
 describe(`API changes an existent article`, () => {
   const newArticle = {
-    "title": `Дам погладить котика`,
+    "title": `Дам погладить котика котика котика`,
     "announce": `Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
     "fullText": `Это один из лучших рок-музыкантов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Золотое сечение — соотношение двух величин, гармоническая пропорция.`,
     "categories": [1, 2],
-    "picture": `picture.jpg`
+    "picture": `picture.jpg`,
+    "userId": 1
   };
 
   let app;
@@ -140,16 +177,17 @@ describe(`API changes an existent article`, () => {
   test(`The article is really changed`, () =>
     request(app)
       .get(`/articles/1`)
-      .expect((res) => expect(res.body.title).toBe(`Дам погладить котика`)));
+      .expect((res) => expect(res.body.title).toBe(`Дам погладить котика котика котика`)));
 });
 
 test(`API returns the 404 status when trying to change a non-existent article`, async () => {
   const validOffer = {
-    "title": `Борьба с прокрастинацией`,
+    "title": `Борьба с прокрастинацией Борьба с прокрастинацией`,
     "announce": `Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
     "fullText": `Это один из лучших рок-музыкантов. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Золотое сечение — соотношение двух величин, гармоническая пропорция.`,
     "categories": [1, 2],
-    "picture": `picture.jpg`
+    "picture": `picture.jpg`,
+    "userId": 1
   };
   const app = await createApi();
 
@@ -240,7 +278,7 @@ describe(`API creates a comment if the data is valid`, () => {
   test(`The number of comments has been changed`, () =>
     request(app)
       .get(`/articles/2/comments`)
-      .expect((res) => expect(res.body.length).toBe(2)));
+      .expect((res) => expect(res.body.length).toBe(3)));
 });
 
 test(`API doesn't create a comment to the non-existent article and returns the 404 status`, async () => {
