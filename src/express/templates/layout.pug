@@ -29,10 +29,18 @@ html(lang='ru')
         background-color: tomato;
         color: white;
       }
+
+      .js-hidden {
+        display: none;
+      }
   body
     .wrapper
       include partials/header.pug
       block content
       include partials/footer.pug
 
+    include partials/modal
+
     block scripts
+
+

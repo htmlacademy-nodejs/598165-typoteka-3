@@ -52,3 +52,8 @@ block content
     include partials/articles-list
     .preview__toggle-wrapper
       +pagination(page, totalPages, 1, `?`)
+
+block scripts
+  script(src='/js/vendor.js')
+  script(src='/js/main.js')
+  script(src='/js/popup.js')

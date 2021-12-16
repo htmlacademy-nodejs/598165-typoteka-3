@@ -22,7 +22,7 @@ mainRouter.get(`/`, ash(async (req, res) => {
   res.render(`main`, {articles, page, totalPages, categories});
 }));
 
-mainRouter.get(`/register`, (req, res) => res.render(`sign-up`));
+mainRouter.get(`/register`, (req, res) => res.render(`sign-up`, {noPopup: true}));
 mainRouter.get(`/login`, (req, res) => res.render(`login`));
 mainRouter.get(`/search`, ash(async (req, res) => {
   const {query} = req.query;

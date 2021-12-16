@@ -54,3 +54,7 @@ block content
                   placeholder='Присоединиться к обсуждению')
               button.comments__button.button.button--colored(type='submit') Опубликовать
               +insertErrorMessageList(errors)
+block scripts
+  script(src='/js/vendor.js')
+  script(src='/js/main.js')
+  script(src='/js/popup.js')
