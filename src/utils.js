@@ -19,9 +19,14 @@ const shuffle = (array) => {
   return shuffled;
 };
 
-const ensureArray = (arg) => Array.isArray(arg)
-  ? arg.map((it) => +it)
-  : [+arg];
+const ensureArray = (arg) => {
+  if (!arg) {
+    return [];
+  }
+  return Array.isArray(arg)
+    ? arg.map((it) => +it)
+    : [arg];
+};
 
 const getRandomSubarray = (array) => {
   array = array.slice();

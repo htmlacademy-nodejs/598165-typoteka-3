@@ -54,8 +54,11 @@ articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
   } catch (err) {
     const errors = err.response.data;
     const categories = await getAddArticleData();
+    const savedInputs = Object
+      .assign({}, articleData, {picture: file ? file.originalname : ``});
 
     res.render(`articles/new-article`, {
+      savedInputs,
       categories,
       errors,
     });
@@ -68,24 +71,30 @@ articlesRouter.get(`/edit/:id`, ash(async (req, res) => {
   res.render(`articles/edit-article`, {id, article, categories});
 }));
 
-articlesRouter.post(`/edit/:id`, upload.single(`avatar`), ash(async (req, res) => {
+articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req, res) => {
   const {body, file} = req;
-  const {id} = req.params;
+  const {articleId} = req.params;
   const articleData = {
     title: body.title,
     announce: body.announce,
-    fullText: body[`full-text`],
+    fullText: body.fulltext,
     categories: ensureArray(body.categories),
     picture: file ? file.filename : ``
   };
 
   try {
-    await api.editArticle(id, articleData);
+    await api.editArticle(articleId, articleData);
     res.redirect(`/my`);
   } catch (err) {
     const errors = err.response.data;
-    const [article, categories] = await getEditArticleData(id);
-    res.render(`articles/edit-article`, {id, article, categories, errors});
+    const [article, categories] = await getEditArticleData(articleId);
+    const savedInputs = Object
+      .assign({}, article, articleData, {
+        categories: articleData
+          .categories.map((id) => ({id}))
+      });
+
+    res.render(`articles/edit-article`, {articleId, article: savedInputs, categories, errors});
   }
 }));
 

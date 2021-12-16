@@ -1,7 +1,15 @@
 extends ../layout.pug
 
 block content
-  - const createdAt = new Date();
+  -
+    const createdAt = new Date();
+    const article = {
+      title: ``,
+      announce: ``,
+      fullText: ``,
+      categories: [],
+    };
+    Object.assign(article, savedInputs);
 
   main
     section.modal.modal--flex
@@ -22,7 +30,7 @@ block content
               .form__wrapper.form__wrapper--intro
                 .form__field
                   label
-                    input(type='text' placeholder='Заголовок' name='title' required)
+                    input(type='text' placeholder='Заголовок' name='title' value=article.title required)
                   +insertErrorMessage('title', errors)
                 .form__field.form__field--post-image
                   label
@@ -34,12 +42,14 @@ block content
                       | Обзор
                 div.form__checkbox-field
                   each category in categories
+                    - const isChecked = article.categories.some((it) => it === category.id)
                     .new-publication__checkbox.new-publication__checkbox--auto
                       input(
                         id=`checkbox-${category.id}`
                         type='checkbox'
                         name=`categories`
                         value=`${category.id}`
+                        checked=isChecked
                       )
                       label(for=`checkbox-${category.id}`) #{category.name}
                   a.new-publication__form-link.button.button--transparent(href='/categories') Добавить
@@ -48,10 +58,12 @@ block content
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='2' placeholder='Анонс публикации' name='announce')
+                      | #{article.announce}
                   +insertErrorMessage('announce', errors)
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='5' placeholder='Полный текст публикации' name='full-text')
+                      | #{article.fullText}
                   +insertErrorMessage('fullText', errors)
           +insertErrorMessageList(errors)
       .modal__overlay

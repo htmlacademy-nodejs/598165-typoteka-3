@@ -1,5 +1,4 @@
 extends ../layout.pug
-
 block content
   section.modal.modal--flex
     .popup.popup--new-publication.popup--flex
@@ -15,7 +14,7 @@ block content
           button.new-publication__button.button.button--colored(type='submit' form='edit-form') Опубликовать
         button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
         .new-publication__form.form
-          form#edit-form(action=`/articles/edit/${id}` method='POST' enctype='multipart/form-data')
+          form#edit-form(action=`/articles/edit/${articleId}` method='POST' enctype='multipart/form-data')
             .form__wrapper.form__wrapper--intro
               .form__field
                 label
@@ -32,7 +31,7 @@ block content
                 button.button.button--transparent Удалить
               div.form__checkbox-field
                 each category in categories
-                  - const isChecked = article.categories.some((it) => it.name === category.name)
+                  - const isChecked = article.categories.some((it) => it.id === category.id)
                   .new-publication__checkbox.new-publication__checkbox--auto
                     input(
                       id=`checkbox-${category.id}`
@@ -52,7 +51,7 @@ block content
                 +insertErrorMessage('announce', errors)
               .form__field.form__field--publication-text
                 label
-                  textarea(rows='5' placeholder='Полный текст публикации')
+                  textarea(rows='5' placeholder='Полный текст публикации' name="fulltext")
                     | #{article.fullText}
                 +insertErrorMessage('fullText', errors)
         +insertErrorMessageList(errors)
