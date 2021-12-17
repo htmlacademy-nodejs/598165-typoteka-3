@@ -2,10 +2,15 @@
 
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
-const articleValidator = require(`../middleware/article-validator`);
 const articleExists = require(`../middleware/article-exists`);
-const commentsValidator = require(`../middleware/comments-validator`);
 const routeParamsValidator = require(`../middleware/route-params-vallidator`);
+
+const getValidator = require(`../middleware/get-validator`);
+const articleSchema = require(`../middleware/model-schemas/article`);
+const commentSchema = require(`../middleware/model-schemas/comment`);
+
+const articleValidator = getValidator(articleSchema);
+const commentsValidator = getValidator(commentSchema);
 
 const {asyncHandler: ash} = require(`../../utils`);
 

@@ -1,8 +1,6 @@
 'use strict';
 
 const Joi = require(`joi`);
-const {HttpCode} = require(`../../constants`);
-
 const ErrorArticleMessage = {
   TITLE_MIN: `Заголовок содержит меньше 30 символов`,
   TITLE_MAX: `Заголовок не может содержать более 250 символов`,
@@ -40,15 +38,4 @@ const schema = Joi.object({
   picture: Joi.string().empty(``),
 });
 
-module.exports = (req, res, next) => {
-  const newArticle = req.body;
-  const {error} = schema.validate(newArticle, {abortEarly: false});
-
-  if (error) {
-    const errorMessages = error.details.reduce((acc, it) => Object.assign(acc, {[it.path]: it.message}), {});
-    return res.status(HttpCode.BAD_REQUEST)
-      .send(JSON.stringify(errorMessages));
-  }
-
-  return next();
-};
+module.exports = schema;
