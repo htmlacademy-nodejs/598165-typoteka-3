@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const mainRouter = new Router();
 const api = require(`../api`).getApi();
+const {upload} = require(`../middlewares/upload`);
 const {asyncHandler: ash} = require(`../../utils`);
 
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
@@ -22,8 +23,34 @@ mainRouter.get(`/`, ash(async (req, res) => {
   res.render(`main`, {articles, page, totalPages, categories});
 }));
 
-mainRouter.get(`/register`, (req, res) => res.render(`sign-up`, {noPopup: true}));
-mainRouter.get(`/login`, (req, res) => res.render(`login`));
+mainRouter.get(`/register`, (req, res) => res
+  .render(`sign-up`, {noPopup: true}));
+
+mainRouter.post(`/register`, upload.single(`avatar`), ash(async (req, res) => {
+  const {body, file} = req;
+  const userData = {
+    avatar: file ? file.filename : ``,
+    email: body[`user-email`],
+    firstName: body[`user-first-name`],
+    lastName: body[`user-last-name`],
+    password: body[`user-password`],
+    passwordRepeated: body[`user-password-again`],
+  };
+
+  try {
+    await api.createUser(userData);
+    res.redirect(`/login`);
+  } catch (err) {
+    const errors = err.response.data;
+    const savedInputs = Object
+      .assign({}, userData);
+    res.render(`sign-up`, {noPopup: true, errors, savedInputs});
+  }
+}));
+
+mainRouter.get(`/login`, (req, res) => res
+  .render(`sign-up`, {noPopup: true, login: true}));
+
 mainRouter.get(`/search`, ash(async (req, res) => {
   const {query} = req.query;
   if (!query) {

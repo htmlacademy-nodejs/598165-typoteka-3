@@ -263,6 +263,7 @@ describe(`API creates a comment if the data is valid`, () => {
   let response;
   const newComment = {
     text: `Валидный комментарий`,
+    userId: 1
   };
 
   beforeAll(async () => {
@@ -286,7 +287,7 @@ test(`API doesn't create a comment to the non-existent article and returns the 4
 
   return request(app)
     .post(`/articles/20/comments`)
-    .send({text: `Комментарий`})
+    .send({text: `Комментарий`, userId: 1})
     .expect(HttpCode.NOT_FOUND);
 });
 

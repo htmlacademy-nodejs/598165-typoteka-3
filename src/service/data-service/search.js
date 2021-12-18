@@ -7,6 +7,7 @@ class SearchService {
 
   constructor(sequelize) {
     this._Article = sequelize.models.Article;
+    this._User = sequelize.models.User;
   }
 
   async findAll(searchText) {
@@ -16,7 +17,14 @@ class SearchService {
           [Op.substring]: searchText
         }
       },
-      include: [Alias.CATEGORIES],
+      include: [Alias.CATEGORIES, {
+        model: this._User,
+        as: Alias.USERS,
+        attributes: {
+          exclude: [`passwordHash`]
+        }
+
+      }],
       order: [[`createdAt`, `DESC`]]
     });
 

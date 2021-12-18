@@ -4,8 +4,8 @@ const express = require(`express`);
 const {Router} = require(`express`);
 
 const {
-  article, category, search,
-  ArticleService, CommentService, CategoryService, SearchService,
+  article, category, search, user,
+  ArticleService, CommentService, CategoryService, SearchService, UserService,
   defineModels
 } = require(`../api`);
 
@@ -51,6 +51,7 @@ module.exports = {
     article(routes, new ArticleService(sequelize), new CommentService(sequelize));
     category(routes, new CategoryService(sequelize));
     search(routes, new SearchService(sequelize));
+    user(routes, new UserService(sequelize));
 
     try {
       logger.info(`Trying to connect to the database...`);

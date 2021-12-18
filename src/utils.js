@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require(`path`);
+const FILE_TYPES = [`image/png`, `image/jpg`, `image/jpeg`];
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -43,10 +43,7 @@ const getRandomFromArray = (array) => {
 };
 
 const checkFileType = (file) => {
-  const fileExtension = path.extname(file.originalname);
-  const allowedTypes = /jpeg|jpg|png/;
-
-  return allowedTypes.test(fileExtension.toLowerCase());
+  return FILE_TYPES.includes(file.mimetype);
 };
 
 const asyncHandler = (callback) => {

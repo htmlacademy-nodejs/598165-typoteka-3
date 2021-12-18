@@ -6,7 +6,8 @@ class ArticleService {
 
   constructor(sequelize) {
     this._Article = sequelize.models.Article;
-    this._Category = sequelize.models.Category;
+    this._Comment = sequelize.models.Comment;
+    this._User = sequelize.models.User;
   }
 
   async create(articleData) {
@@ -25,9 +26,25 @@ class ArticleService {
   }
 
   async findAll(withComments) {
-    const include = [Alias.CATEGORIES];
+    const include = [Alias.CATEGORIES, {
+      model: this._User,
+      as: Alias.USERS,
+      attributes: {
+        exclude: [`passwordHash`]
+      }
+    }];
+
     if (withComments) {
-      include.push(Alias.COMMENTS);
+      include.push({
+        model: this._Comment, as: Alias.COMMENTS,
+        include: [{
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
+        }]
+      });
     }
 
     const articles = await this._Article.findAll({
@@ -44,7 +61,26 @@ class ArticleService {
     const {count, rows} = await this._Article.findAndCountAll({
       limit,
       offset,
-      include: [Alias.CATEGORIES, Alias.COMMENTS],
+      include: [
+        Alias.CATEGORIES,
+        {
+          model: this._Comment, as: Alias.COMMENTS,
+          include: [{
+            model: this._User,
+            as: Alias.USERS,
+            attributes: {
+              exclude: [`passwordHash`]
+            }
+          }]
+        },
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
+        }
+      ],
       order: [[`createdAt`, `DESC`]],
       distinct: true
     });
@@ -52,9 +88,29 @@ class ArticleService {
   }
 
   findOne(id, withComments) {
-    const include = [Alias.CATEGORIES];
+    const include = [
+      Alias.CATEGORIES,
+      {
+        model: this._User,
+        as: Alias.USERS,
+        attributes: {
+          exclude: [`passwordHash`]
+        }
+      }
+    ];
+
     if (withComments) {
-      include.push(Alias.COMMENTS);
+      include.push({
+        model: this._Comment,
+        as: Alias.COMMENTS,
+        include: [{
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
+        }]
+      });
     }
     return this._Article.findByPk(id, {include});
   }

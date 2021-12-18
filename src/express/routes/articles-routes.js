@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const api = require(`../api`).getApi();
-const {upload} = require(`../upload`);
+const {upload} = require(`../middlewares/upload`);
 const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
@@ -101,6 +101,7 @@ articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req,
 articlesRouter.get(`/:id`, ash(async (req, res) => {
   const {id} = req.params;
   const article = await api.getArticle(id, true);
+  console.log(article);
   res.render(`articles/article`, {article, id});
 }));
 
