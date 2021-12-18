@@ -27,14 +27,14 @@ const PICTURES = [`forest@1x.jpg`, `sea@1x.jpg`, `skyscraper@1x.jpg`, ``];
 const USERS = [
   {
     email: `ivanov@example.com`,
-    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf99`,
+    passwordHash: `$2b$10$axs.jCQ/RwuP8C9NV0GzVeIzkuuAV.jmfGpip0ddzeoCbdzCuSdpm`,
     firstName: `Иван`,
     lastName: `Иванов`,
     avatar: `avatar-1.png`
   },
   {
     email: `petrov@example.com`,
-    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf99`,
+    passwordHash: `$2b$10$vZHZx4H8MCC44.OlVPtRlOY2bEfaMC.62AOltMGMgq1JdXy2rq1jS`,
     firstName: `Пётр`,
     lastName: `Петров`,
     avatar: `avatar-2.png`

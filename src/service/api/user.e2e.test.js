@@ -18,7 +18,11 @@ const {
 
 const createApi = async () => {
   const mockDb = new Sequelize(`sqlite::memory:`, {logging: false});
-  await initDb(mockDb, {categories: mockCategories, articles: mockArticles, users: mockUsers});
+  await initDb(mockDb, {
+    categories: mockCategories,
+    articles: mockArticles,
+    users: mockUsers
+  });
   const app = express();
   app.use(express.json());
   user(app, new DataService(mockDb));
@@ -114,5 +118,57 @@ describe(`API doesn't create a user if the data is invalid`, () => {
       .post(`/user`)
       .send(badUserData)
       .expect(HttpCode.BAD_REQUEST);
+  });
+
+});
+describe(`API authenticates a user if credentials are valid`, () => {
+  const validAuthData = {
+    email: `ivanov@example.com`,
+    password: `ivanov`,
+  };
+
+  let response;
+
+  beforeAll(async () => {
+    const app = await createApi();
+    response = await request(app)
+      .post(`/user/auth`)
+      .send(validAuthData);
+  });
+
+  test(`The status code is 200`, () => expect(response.statusCode)
+    .toBe(HttpCode.OK));
+
+  test(`The user's last name is Иванов`, () => expect(response.body.lastName)
+    .toBe(`Иванов`));
+});
+
+describe(`API doesn't authenticate a user if credentials are invalid`, () => {
+  let app;
+  beforeAll(async () => {
+    app = await createApi();
+  });
+
+  test(`If an email is incorrect then the status is 401`, async () => {
+    const badAuthData = {
+      email: `notexist@example.com`,
+      password: `petrov`
+    };
+
+    await request(app)
+      .post(`/user/auth`)
+      .send(badAuthData)
+      .expect(HttpCode.UNAUTHORIZED);
+  });
+
+  test(`If the password doesn't match then the status is 401`, async () => {
+    const badAuthData = {
+      email: `petrov@example.com`,
+      password: `ivanov`
+    };
+    await request(app)
+      .post(`/user/auth`)
+      .send(badAuthData)
+      .expect(HttpCode.UNAUTHORIZED);
   });
 });
