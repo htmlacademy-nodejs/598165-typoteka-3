@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
+const auth = require(`../middlewares/auth`);
 const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
@@ -35,13 +36,16 @@ articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
   });
 }));
 
-articlesRouter.get(`/add`, ash(async (req, res) => {
+articlesRouter.get(`/add`, auth, ash(async (req, res) => {
   const {user} = req.session;
   const categories = await api.getCategories();
   res.render(`articles/new-article`, {categories, user});
 }));
 
-articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
+articlesRouter.post(`/add`, [
+  auth, upload.single(`picture`)
+], ash(async (req, res) => {
+
   const {body, file} = req;
   const {user} = req.session;
 
@@ -72,7 +76,7 @@ articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
   }
 }));
 
-articlesRouter.get(`/edit/:id`, ash(async (req, res) => {
+articlesRouter.get(`/edit/:id`, auth, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
 
@@ -80,7 +84,10 @@ articlesRouter.get(`/edit/:id`, ash(async (req, res) => {
   res.render(`articles/edit-article`, {id, article, categories, user});
 }));
 
-articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req, res) => {
+articlesRouter.post(`/edit/:articleId`, [
+  auth,
+  upload.single(`avatar`)], ash(async (req, res) => {
+
   const {body, file} = req;
   const {articleId} = req.params;
   const {user} = req.session;
@@ -124,7 +131,7 @@ articlesRouter.get(`/:id`, ash(async (req, res) => {
   res.render(`articles/article`, {article, id, user});
 }));
 
-articlesRouter.post(`/:id/comments`, ash(async (req, res) => {
+articlesRouter.post(`/:id/comments`, auth, ash(async (req, res) => {
   const {id} = req.params;
   const {comment} = req.body;
   const {user} = req.session;

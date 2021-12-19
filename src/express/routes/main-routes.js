@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
+const auth = require(`../middlewares/auth`);
 const {asyncHandler: ash} = require(`../../utils`);
 
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
@@ -84,7 +85,7 @@ mainRouter.get(`/search`, ash(async (req, res) => {
   }
 }));
 
-mainRouter.get(`/categories`, (req, res) => {
+mainRouter.get(`/categories`, auth, (req, res) => {
   const {user} = req.session;
   return res.render(`all-categories`, {user});
 });

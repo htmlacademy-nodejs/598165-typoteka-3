@@ -41,19 +41,20 @@ block content
                   time.comments__date(datetime=date.toISOString())
                     +formatDate(date)
                 p.comments__message #{comment.text}
-          .comments__footer.comments__footer--user
-            form(
-              action=`/articles/${id}/comments`
-              method='POST'
-              autocomplete="off")
-              .comments__avatar.avatar
-                +insertAvatar(user.avatar)
-              label
-                textarea(rows='1'
-                  name="comment"
-                  placeholder='Присоединиться к обсуждению')
-              button.comments__button.button.button--colored(type='submit') Опубликовать
-              +insertErrorMessageList(errors)
+          if (user)
+            .comments__footer.comments__footer--user
+              form(
+                action=`/articles/${id}/comments`
+                method='POST'
+                autocomplete="off")
+                .comments__avatar.avatar
+                  +insertAvatar(user.avatar)
+                label
+                  textarea(rows='1'
+                    name="comment"
+                    placeholder='Присоединиться к обсуждению')
+                button.comments__button.button.button--colored(type='submit') Опубликовать
+                +insertErrorMessageList(errors)
 block scripts
   script(src='/js/vendor.js')
   script(src='/js/main.js')
