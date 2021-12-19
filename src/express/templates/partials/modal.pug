@@ -18,21 +18,21 @@ block modal
       firstName: ``,
       lastName: ``,
       password: ``,
-      passwordRepeated: ``,
+      passwordRepeated: ``
     };
     Object.assign(user, savedInputs);
 
 section.modal(class= noPopup ? `` : `js-hidden`)
   .popup.popup--registration
-    button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
+    a.popup__button.button.button--popup-close(href="/" aria-label='Закрыть окно') Закрыть окно
     h2.visually-hidden Форма регистрации
     ul.popup__tabs
       li.popup__tab.popup__tab--register(class=registrationTabClass)
         button.popup__tab-switcher.button(type='button') Регистрация
       li.popup__tab.popup__tab--log-in(class=loginTabClass)
         button.popup__tab-switcher.button(type='button') Войти
-    .popup__form.form.form--register
-      form(action='/register' method='post' enctype="multipart/form-data" class=registrationFormClass)
+    .popup__form.form.form--register(class=registrationFormClass)
+      form(action='/register' method='post' enctype="multipart/form-data")
         .form__field
           label
             input(type='email' placeholder='Электронная почта' name="user-email" value=user.email required)
@@ -56,8 +56,8 @@ section.modal(class= noPopup ? `` : `js-hidden`)
             | Загрузить фото профиля
         +insertErrorMessageList(errors)
         button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
-    .popup__form.form.form--log-in
-      form(action='#' method='get' class=loginFormClass)
+    .popup__form.form.form--log-in(class=loginFormClass)
+      form(action='/login' method='POST')
         .form__field
           label
             input(type='email' placeholder='Электронная почта' name="user-email" required)
