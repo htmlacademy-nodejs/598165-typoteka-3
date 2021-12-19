@@ -46,6 +46,7 @@ articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
   const {user} = req.session;
 
   const articleData = {
+    userId: user.id,
     title: body.title,
     announce: body.announce,
     fullText: body[`full-text`],
@@ -85,6 +86,7 @@ articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req,
   const {user} = req.session;
 
   const articleData = {
+    userId: user.id,
     title: body.title,
     announce: body.announce,
     fullText: body.fulltext,
@@ -128,7 +130,7 @@ articlesRouter.post(`/:id/comments`, ash(async (req, res) => {
   const {user} = req.session;
 
   try {
-    await api.createComment(id, {text: comment});
+    await api.createComment(id, {userId: user.id, text: comment});
     res.redirect(`/articles/${id}`);
   } catch (err) {
     const errors = err.response.data;

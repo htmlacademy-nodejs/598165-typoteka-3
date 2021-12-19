@@ -1,7 +1,7 @@
 block mixins
   mixin insertArticleImg(article)
     if article.picture
-      - const filename = article.picture;
+      - filename = article.picture;
 
       .preview__background
         img.preview__background-image(
@@ -11,18 +11,18 @@ block mixins
           alt=`${article.title}`)
 
   mixin formatDate(date)
-    - const fullYear = date.getFullYear()
-    - const month = (date.getMonth() + 1).toString().padStart(2, `0`)
-    - const day = date.getDate().toString().padStart(2, `0`);
-    - const hours = date.getHours().toString().padStart(2, `0`);
-    - const minutes = date.getMinutes().toString().padStart(2, `0`);
+    - fullYear = date.getFullYear()
+    - month = (date.getMonth() + 1).toString().padStart(2, `0`)
+    - day = date.getDate().toString().padStart(2, `0`);
+    - hours = date.getHours().toString().padStart(2, `0`);
+    - minutes = date.getMinutes().toString().padStart(2, `0`);
 
     | #{`${day}.${month}.${fullYear}, ${hours}:${minutes}`}
 
   mixin pagination(page, totalPages, width, prefix)
     -
-      let start = page - width;
-      let end = page + width;
+      start = page - width;
+      end = page + width;
 
       if (start < 1) {
         end += 1 - start;
@@ -35,7 +35,7 @@ block mixins
       if (start < 1) {
         start = 1;
       }
-      let i = start - 1;
+      i = start - 1;
     ul.preview__pagination.pagination(style={"justify-content": "center"})
       if start > 1
         li
@@ -50,7 +50,7 @@ block mixins
 
   mixin insertErrorMessageList(errors)
     if errors
-      - const errorsMessages = Object.values(errors)
+      - errorsMessages = Object.values(errors)
       .form__validation-error
         p.form__error-message Произошли ошибки:
         ul.form__errors
@@ -61,3 +61,7 @@ block mixins
     if errors
       if key in errors
         p.field__validation-error= errors[key]
+
+  mixin insertAvatar(avatar)
+    if avatar
+      img(src=`/img/${avatar}` alt='аватар пользователя')
