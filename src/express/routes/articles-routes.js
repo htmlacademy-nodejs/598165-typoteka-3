@@ -1,6 +1,8 @@
 'use strict';
 
 const {Router} = require(`express`);
+const csrf = require(`csurf`);
+
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
 const auth = require(`../middlewares/auth`);
@@ -8,6 +10,7 @@ const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
 const articlesRouter = new Router();
+const csrfProtection = csrf();
 
 articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
   const {categoryId} = req.params;
@@ -36,14 +39,20 @@ articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
   });
 }));
 
-articlesRouter.get(`/add`, auth, ash(async (req, res) => {
+articlesRouter.get(`/add`, auth, csrfProtection, ash(async (req, res) => {
   const {user} = req.session;
   const categories = await api.getCategories();
-  res.render(`articles/new-article`, {categories, user});
+  res.render(`articles/new-article`, {
+    categories,
+    user,
+    csrfToken: req.csrfToken()
+  });
 }));
 
 articlesRouter.post(`/add`, [
-  auth, upload.single(`picture`)
+  auth,
+  upload.single(`picture`),
+  csrfProtection
 ], ash(async (req, res) => {
 
   const {body, file} = req;
@@ -76,17 +85,25 @@ articlesRouter.post(`/add`, [
   }
 }));
 
-articlesRouter.get(`/edit/:id`, auth, ash(async (req, res) => {
+articlesRouter.get(`/edit/:id`, auth, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
 
   const [article, categories] = await getEditArticleData(id);
-  res.render(`articles/edit-article`, {id, article, categories, user});
+  res.render(`articles/edit-article`, {
+    id,
+    article,
+    categories,
+    user,
+    csrfToken: req.csrfToken()
+  });
 }));
 
 articlesRouter.post(`/edit/:articleId`, [
   auth,
-  upload.single(`avatar`)], ash(async (req, res) => {
+  upload.single(`avatar`),
+  csrfProtection
+], ash(async (req, res) => {
 
   const {body, file} = req;
   const {articleId} = req.params;
@@ -123,15 +140,20 @@ articlesRouter.post(`/edit/:articleId`, [
   }
 }));
 
-articlesRouter.get(`/:id`, ash(async (req, res) => {
+articlesRouter.get(`/:id`, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
 
   const article = await api.getArticle(id, true);
-  res.render(`articles/article`, {article, id, user});
+  res.render(`articles/article`, {
+    article,
+    id,
+    user,
+    csrfToken: req.csrfToken()
+  });
 }));
 
-articlesRouter.post(`/:id/comments`, auth, ash(async (req, res) => {
+articlesRouter.post(`/:id/comments`, auth, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {comment} = req.body;
   const {user} = req.session;

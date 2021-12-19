@@ -47,6 +47,7 @@ block content
                 action=`/articles/${id}/comments`
                 method='POST'
                 autocomplete="off")
+                input(type="hidden" name="_csrf" value=csrfToken)
                 .comments__avatar.avatar
                   +insertAvatar(user.avatar)
                 label

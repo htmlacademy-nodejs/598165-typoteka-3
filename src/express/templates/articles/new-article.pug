@@ -2,7 +2,7 @@ extends ../layout.pug
 
 block content
   -
-    const createdAt = new Date();
+    createdAt = new Date();
     const article = {
       title: ``,
       announce: ``,
@@ -27,6 +27,7 @@ block content
           button.popup__button.button.button--popup-close(type='button' aria-label='Закрыть окно') Закрыть окно
           .new-publication__form.form
             form#new-article(action='/articles/add' method='POST' enctype='multipart/form-data')
+              input(type="hidden" name="_csrf" value=csrfToken)
               .form__wrapper.form__wrapper--intro
                 .form__field
                   label
@@ -42,7 +43,7 @@ block content
                       | Обзор
                 div.form__checkbox-field
                   each category in categories
-                    - const isChecked = article.categories.some((it) => it === category.id)
+                    - isChecked = article.categories.some((it) => it === category.id)
                     .new-publication__checkbox.new-publication__checkbox--auto
                       input(
                         id=`checkbox-${category.id}`
