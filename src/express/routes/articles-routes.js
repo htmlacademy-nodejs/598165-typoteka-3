@@ -145,6 +145,9 @@ articlesRouter.get(`/:id`, csrfProtection, ash(async (req, res) => {
   const {user} = req.session;
 
   const article = await api.getArticle(id, true);
+  article.comments.sort((a, b) => {
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
   res.render(`articles/article`, {
     article,
     id,
