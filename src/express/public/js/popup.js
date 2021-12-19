@@ -6,14 +6,17 @@ enableScrolling();
 const headerRegistrationLink = document.querySelector(`.header__registration`);
 const headerEnterLink = document.querySelector(`.header__enter`);
 
-headerRegistrationLink.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  showPopup(`register`);
-});
-headerEnterLink.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  showPopup(`log-in`);
-});
+if (headerRegistrationLink || headerEnterLink) {
+  headerRegistrationLink.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    showPopup(`register`);
+  });
+
+  headerEnterLink.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    showPopup(`log-in`);
+  });
+}
 
 function showPopup(name) {
   let modal = document.querySelector(`.modal`);
@@ -26,7 +29,8 @@ function showPopup(name) {
     tabSwitching();
 
     const closeButton = document.querySelector(`.button--popup-close`);
-    closeButton.addEventListener(`click`, () => {
+    closeButton.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
       modal.classList.add(`js-hidden`);
       modal.classList.remove(`js-shown`);
       enableScrolling();

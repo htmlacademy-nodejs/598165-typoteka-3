@@ -10,6 +10,7 @@ const articlesRouter = new Router();
 
 articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
   const {categoryId} = req.params;
+  const {user} = req.session;
 
   let {page = 1} = req.query;
   page = +page;
@@ -30,16 +31,20 @@ articlesRouter.get(`/category/:categoryId`, ash(async (req, res) => {
     articlesInCategory,
     page,
     totalPages,
+    user
   });
 }));
 
 articlesRouter.get(`/add`, ash(async (req, res) => {
+  const {user} = req.session;
   const categories = await api.getCategories();
-  res.render(`articles/new-article`, {categories});
+  res.render(`articles/new-article`, {categories, user});
 }));
 
 articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
   const {body, file} = req;
+  const {user} = req.session;
+
   const articleData = {
     title: body.title,
     announce: body.announce,
@@ -61,19 +66,24 @@ articlesRouter.post(`/add`, upload.single(`picture`), ash(async (req, res) => {
       savedInputs,
       categories,
       errors,
+      user
     });
   }
 }));
 
 articlesRouter.get(`/edit/:id`, ash(async (req, res) => {
   const {id} = req.params;
+  const {user} = req.session;
+
   const [article, categories] = await getEditArticleData(id);
-  res.render(`articles/edit-article`, {id, article, categories});
+  res.render(`articles/edit-article`, {id, article, categories, user});
 }));
 
 articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req, res) => {
   const {body, file} = req;
   const {articleId} = req.params;
+  const {user} = req.session;
+
   const articleData = {
     title: body.title,
     announce: body.announce,
@@ -94,20 +104,28 @@ articlesRouter.post(`/edit/:articleId`, upload.single(`avatar`), ash(async (req,
           .categories.map((id) => ({id}))
       });
 
-    res.render(`articles/edit-article`, {articleId, article: savedInputs, categories, errors});
+    res.render(`articles/edit-article`, {
+      articleId,
+      article: savedInputs,
+      categories,
+      errors,
+      user
+    });
   }
 }));
 
 articlesRouter.get(`/:id`, ash(async (req, res) => {
   const {id} = req.params;
+  const {user} = req.session;
+
   const article = await api.getArticle(id, true);
-  console.log(article);
-  res.render(`articles/article`, {article, id});
+  res.render(`articles/article`, {article, id, user});
 }));
 
 articlesRouter.post(`/:id/comments`, ash(async (req, res) => {
   const {id} = req.params;
   const {comment} = req.body;
+  const {user} = req.session;
 
   try {
     await api.createComment(id, {text: comment});
@@ -115,9 +133,8 @@ articlesRouter.post(`/:id/comments`, ash(async (req, res) => {
   } catch (err) {
     const errors = err.response.data;
     const article = await api.getArticle(id, true);
-    res.render(`articles/article`, {article, id, errors});
+    res.render(`articles/article`, {article, id, errors, user});
   }
-
 }));
 
 function getAddArticleData() {
