@@ -6,10 +6,11 @@
   "scripts": {
     "eslint": "eslint --ext .js src/",
     "server": "nodemon ./src/service/service.js --server",
-    "start": "cross-env LOG_LEVEL=error node -r dotenv/config ./src/service/service.js",
-    "start:debug": "cross-env LOG_LEVEL=info NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js",
+    "start-back-server": "cross-env LOG_LEVEL=error node -r dotenv/config ./src/service/service.js --server",
+    "start-back-server:debug": "cross-env LOG_LEVEL=info NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js --server",
     "start-front-server": "nodemon -r dotenv/config src/express/express.js",
-    "start-front-server:debug": "cross-env LOG_LEVEL=info NODE_ENV=development nodemon -r dotenv/config src/express/express.js",
+    "start-servers": "concurrently --names \"SSR,API\" --prefix-colors \"green,blue\"   \"npm:start-front-server\" \"npm:start-back-server\"",
+    "start": "npm run start-servers",
     "test": "npm run eslint && jest",
     "jest": "jest"
   },
@@ -37,6 +38,7 @@
     "axios": "0.24.0",
     "bcrypt": "5.0.1",
     "chalk": "3.0.0",
+    "concurrently": "6.5.1",
     "connect-session-sequelize": "7.1.1",
     "cross-env": "7.0.3",
     "csurf": "1.11.0",
