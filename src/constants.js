@@ -32,6 +32,8 @@ const HttpMethod = {
   DELETE: `DELETE`
 };
 
+const BLOG_OWNER_USER_ID = 3;
+
 module.exports = {
   MOCK_FILE,
   DEFAULT_COMMAND,
@@ -42,4 +44,5 @@ module.exports = {
   Env,
   ARTICLES_PER_PAGE,
   HttpMethod,
+  BLOG_OWNER_USER_ID
 };

@@ -4,12 +4,26 @@ block header
       img.logo__image(src='/img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
       span.logo__name Типотека
     if (user)
-      a.button.button--colored.header__button-new(href="/articles/add") Новая запись
-      .header__dropdown
-        a.button.button--burger.header__burger(href='#') Открыть меню
-        ul.navigation.header__navigation
-          li.navigation__item
-            a(href='index.html') index.html --- все ссылки
+      if (user.isHost)
+        a.button.button--colored.header__button-new(href="/articles/add") Новая запись
+        .header__dropdown
+          a.button.button--burger.header__burger(href='#') Открыть меню
+          ul.navigation.header__navigation
+            li.navigation__item
+              a(href='/my') Мои записи
+              a(href='/my/comments') Комментарии
+              a(href='/categories') Категории
+              a(href='/logout') Выйти
+      else
+        nav.header__nav
+          ul.header__nav-list
+            li.header__list-item
+              p #{user.firstName} #{user.lastName}
+            li.header__list-item
+              a.header__exit(href='/logout') Выйти
+        a.header__avatar.avatar
+          +insertAvatar(user.avatar)
+
     else
       nav.header__nav
         ul.header__nav-list

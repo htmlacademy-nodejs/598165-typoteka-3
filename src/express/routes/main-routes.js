@@ -5,12 +5,14 @@ const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
 const auth = require(`../middlewares/auth`);
+const authorize = require(`../middlewares/authorize`);
 const {asyncHandler: ash} = require(`../../utils`);
 
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
-mainRouter.get(`/`, ash(async (req, res) => {
+mainRouter.get(`/`, authorize, ash(async (req, res) => {
   const {user} = req.session;
+
   let {page = 1} = req.query;
   page = +page;
   const limit = ARTICLES_PER_PAGE;
@@ -72,7 +74,7 @@ mainRouter.get(`/logout`, (req, res) => {
   });
 });
 
-mainRouter.get(`/search`, ash(async (req, res) => {
+mainRouter.get(`/search`, authorize, ash(async (req, res) => {
   const {query} = req.query;
   const {user} = req.session;
 
