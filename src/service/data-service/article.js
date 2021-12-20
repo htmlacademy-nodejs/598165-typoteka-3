@@ -88,19 +88,24 @@ class ArticleService {
   }
 
   findOne(id, withComments) {
-    const include = [
-      Alias.CATEGORIES,
-      {
-        model: this._User,
-        as: Alias.USERS,
-        attributes: {
-          exclude: [`passwordHash`]
+    const options = {
+      include: [
+        Alias.CATEGORIES,
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: {
+            exclude: [`passwordHash`]
+          }
         }
-      }
-    ];
+      ],
+      where: [{
+        id
+      }]
+    };
 
     if (withComments) {
-      include.push({
+      options.include.push({
         model: this._Comment,
         as: Alias.COMMENTS,
         include: [{
@@ -111,8 +116,11 @@ class ArticleService {
           }
         }]
       });
+      options.order = [
+        [{model: this._Comment, as: Alias.COMMENTS}, `createdAt`, `ASC`]
+      ];
     }
-    return this._Article.findByPk(id, {include});
+    return this._Article.findOne(options);
   }
 
   async update(id, article) {
