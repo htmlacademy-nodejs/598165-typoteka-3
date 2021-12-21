@@ -88,13 +88,13 @@ articlesRouter.post(`/add`, [
   }
 }));
 
-articlesRouter.get(`/edit/:id`, auth, authorize, csrfProtection, ash(async (req, res) => {
-  const {id} = req.params;
+articlesRouter.get(`/edit/:articleId`, auth, authorize, csrfProtection, ash(async (req, res) => {
+  const {articleId} = req.params;
   const {user} = req.session;
 
-  const [article, categories] = await getEditArticleData(id);
+  const [article, categories] = await getEditArticleData(articleId);
   res.render(`articles/edit-article`, {
-    id,
+    articleId,
     article,
     categories,
     user,
@@ -144,6 +144,7 @@ articlesRouter.post(`/edit/:articleId`, [
   }
 }));
 
+
 articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
@@ -155,8 +156,22 @@ articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
     id,
     user,
     categories,
+    showEditButton: user.isHost,
     csrfToken: req.csrfToken()
   });
+}));
+
+articlesRouter.get(`/delete/:articleId`, auth, authorize, ash(async (req, res) => {
+  const {articleId} = req.params;
+  const {user} = req.session;
+
+  try {
+    await api.deleteArticle(articleId);
+    res.redirect(`/my`);
+  } catch (errors) {
+    const articles = await api.getArticles(true);
+    res.render(`/my`, {articles, user});
+  }
 }));
 
 articlesRouter.post(`/:id/comments`, auth, authorize, csrfProtection, ash(async (req, res) => {

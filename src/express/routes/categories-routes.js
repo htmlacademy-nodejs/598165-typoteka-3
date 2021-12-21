@@ -64,8 +64,6 @@ categoriesRouter.post(`/edit/:categoryId`, [
   const {categoryId} = req.params;
   const {user} = req.session;
 
-  console.log(category);
-
   try {
     await api.editCategory(categoryId, {name: category});
     res.redirect(`/categories`);

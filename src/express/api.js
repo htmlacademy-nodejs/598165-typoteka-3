@@ -84,6 +84,12 @@ class API {
     });
   }
 
+  deleteArticle(id) {
+    return this._load(`/articles/${id}`, {
+      method: HttpMethod.DELETE
+    });
+  }
+
   auth(email, password) {
     return this._load(`user/auth`, {
       method: HttpMethod.POST,

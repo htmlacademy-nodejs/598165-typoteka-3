@@ -6,6 +6,8 @@ block header
     if (user)
       if (user.isHost)
         a.button.button--colored.header__button-new(href="/articles/add") Новая запись
+        if showEditButton
+          a.button.button--colored.header__button-new(href=`/articles/edit/${id}`) Редактировать
         .header__dropdown
           a.button.button--burger.header__burger(href='#') Открыть меню
           ul.navigation.header__navigation

@@ -11,6 +11,7 @@ block content
             time.notes__item-time(datetime=date.toISOString())
               +formatDate(date)
             a.notes__item-text(href=`/articles/${article.id}`) #{article.title}
-            button.notes__button.button.button--close-item(type='button')
+            a.notes__item-time(href=`/articles/edit/${article.id}`) Редактировать
+            a.notes__button.button.button--close-item(href=`/articles/delete/${article.id}`)
               span.visually-hidden Закрыть строку списка
 
