@@ -88,9 +88,13 @@ class CategoryService {
         attributes: []
       }]
     });
+
+    if (!category) {
+      return false;
+    }
+
     category = category.get();
-    if (!category || +category.count) {
-      console.log(`not found or not empty`);
+    if (+category.count) {
       return false;
     }
 
