@@ -1,18 +1,15 @@
-section.main-page__theme-list
-  h2.visually-hidden Список тем
-  ul.themes
-    each category in categories
-      li.themes__item
-        -
-          const linkAttributes = {
-            class: `themes__item-link`,
-            href: `/articles/category/${category.id}`
-          }
-          if (category.id === currentCategoryId) {
-            linkAttributes.class += ` themes__item-link--active`
-            linkAttributes.href = null
-          }
+each category in categories
+  li.themes__item
+    -
+      const linkAttributes = {
+        class: `themes__item-link`,
+        href: `/articles/category/${category.id}`
+      }
+      if (category.id === currentCategoryId) {
+        linkAttributes.class += ` themes__item-link--active`
+        linkAttributes.href = null
+      }
 
-        a&attributes(linkAttributes)
-          | #{category.name}
-          sup #{category.count }
+    a&attributes(linkAttributes)
+      | #{category.name}
+      sup #{category.count }

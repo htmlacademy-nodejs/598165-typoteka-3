@@ -14,12 +14,7 @@ block content
               +formatDate(date)
             h2.post__title.title.title--main #{article.title}
             ul.post__themes.themes
-              each category in article.categories
-                li.themes__item
-                  a.themes__item-link(href='#')
-                    | #{category.name}
-                    sup 88
-                  button.themes__remove-btn(type='button') Удалить категорию
+              include ../partials/categories-list
           if article.picture
             .post__picture
               img(src=`/img/${article.picture}` width=940 height=490 alt=`${article.title}`)

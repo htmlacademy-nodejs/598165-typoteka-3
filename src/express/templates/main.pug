@@ -7,7 +7,10 @@ block content
     p.
 
       Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
-    include partials/categories-list
+    section.main-page__theme-list
+      h2.visually-hidden Список тем
+      ul.themes
+        include partials/categories-list
     .main-page__section-flex
       section.main-page__hot.hot
         h2.hot__name
@@ -49,7 +52,8 @@ block content
             img.last__list-image(src='/img/avatar-small-3.png' width='20' height='20' alt='Аватар пользователя')
             b.last__list-name Игорь Шманский
             a.last__list-link(href='#') Что-то все электрокары в последнее время все на одно лицо делаются))
-    include partials/articles-list
+    section.main-page__list.preview
+      include partials/articles-list
     .preview__toggle-wrapper
       +pagination(page, totalPages, 1, `?`)
 

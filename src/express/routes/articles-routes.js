@@ -147,12 +147,14 @@ articlesRouter.post(`/edit/:articleId`, [
 articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
+  const categories = await api.getCategories(true);
 
   const article = await api.getArticle(id, true);
   res.render(`articles/article`, {
     article,
     id,
     user,
+    categories,
     csrfToken: req.csrfToken()
   });
 }));

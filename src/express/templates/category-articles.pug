@@ -2,11 +2,14 @@ extends layout.pug
 
 block content
   -
-    let currentCategoryId = currentCategory.id;
-    let articles = articlesInCategory;
+    currentCategoryId = currentCategory.id;
+    articles = articlesInCategory;
   main.articles-category
     h1 #{currentCategory.name}
-    include partials/categories-list
-    include partials/articles-list
+    .articles-category__theme-list
+      ul.themes
+        include partials/categories-list
+    section.articles-category__list.preview
+      include partials/articles-list
     .preview__toggle-wrapper
       +pagination(page, totalPages, 1, `?`)
