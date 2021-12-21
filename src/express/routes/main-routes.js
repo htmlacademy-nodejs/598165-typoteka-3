@@ -4,7 +4,6 @@ const {Router} = require(`express`);
 const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
-const auth = require(`../middlewares/auth`);
 const authorize = require(`../middlewares/authorize`);
 const {asyncHandler: ash} = require(`../../utils`);
 
@@ -88,10 +87,5 @@ mainRouter.get(`/search`, authorize, ash(async (req, res) => {
     return res.render(`search-result`, {results: [], user});
   }
 }));
-
-mainRouter.get(`/categories`, auth, (req, res) => {
-  const {user} = req.session;
-  return res.render(`all-categories`, {user});
-});
 
 module.exports = mainRouter;

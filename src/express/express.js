@@ -5,8 +5,11 @@ const session = require(`express-session`);
 
 const mainRoutes = require(`./routes/main-routes`);
 const articlesRouter = require(`./routes/articles-routes`);
+const categoriesRouter = require(`./routes/categories-routes`);
 const myRouter = require(`./routes/my-routes`);
+
 const {HttpCode} = require(`../constants`);
+
 const SequelizeStore = require(`connect-session-sequelize`)(session.Store);
 const {getSequelize} = require(`../service/lib/sequelize`);
 const sequelize = getSequelize();
@@ -56,6 +59,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(`/categories`, categoriesRouter);
 app.use(`/articles`, articlesRouter);
 app.use(`/my`, myRouter);
 app.use(`/`, mainRoutes);

@@ -16,7 +16,7 @@ class CategoryService {
         attributes: [
           `id`,
           `name`,
-          [Sequelize.fn(`COUNT`, `*`), `count`]
+          [Sequelize.fn(`COUNT`, Sequelize.col(`CategoryId`)), `count`]
         ],
         group: [Sequelize.col(`Category.id`)],
         include: [{
@@ -59,6 +59,45 @@ class CategoryService {
     });
 
     return {count, articlesInCategory: rows};
+  }
+
+  create(name) {
+    return this._Category.create({name});
+  }
+
+  async update(id, category) {
+    const [affectedRows] = await this._Category.update(category, {
+      where: {id}
+    });
+
+    return !!affectedRows;
+  }
+
+  async drop(id) {
+    let category = await this._Category.findOne({
+      where: {id},
+      attributes: [
+        `id`,
+        `name`,
+        [Sequelize.fn(`COUNT`, Sequelize.col(`CategoryId`)), `count`]
+      ],
+      group: [Sequelize.col(`Category.id`)],
+      include: [{
+        model: this._ArticleCategory,
+        as: Alias.ARTICLE_CATEGORIES,
+        attributes: []
+      }]
+    });
+    category = category.get();
+    if (!category || +category.count) {
+      console.log(`not found or not empty`);
+      return false;
+    }
+
+    const deletedRows = await this._Category.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
   }
 }
 

@@ -60,7 +60,7 @@ block mixins
   mixin insertErrorMessage(key, errors)
     if errors
       if key in errors
-        p.field__validation-error= errors[key]
+        | #{errors[key]}
 
   mixin insertAvatar(avatar)
     if avatar
