@@ -4,16 +4,16 @@ block content
     section.main-page__publication.publication
       h1.publication__title Комментарии
       ul.publication__list
-        each comment in article.comments
+        each comment in comments
           li.publication__list-item
             .publication__header
-              img.publication__list-image(src='/img/avatar-small-2.png' width='20' height='20' alt='Аватар пользователя')
-              b.publication__list-name #{author}
-              - const date = new Date(comment.createdAt)
+              +insertSmallAvatar(comment['users.avatar'])
+              b.publication__list-name #{comment['users.firstName']} #{comment['users.lastName']}
+              - date = new Date(comment.createdAt)
               time.publication__item-time(datetime=date.toISOString())
                 +formatDate(date)
-            a.publication__item-text(href=`/articles/${article.id}`) #{comment.text}
-            p.publication__text-strong #{article.title}
-            button.publication__button.button.button--close-item(type='button')
+            a.publication__item-text(href=`/articles/${comment['articles.id']}`) #{comment.text}
+            p.publication__text-strong #{comment['articles.title']}
+            a.publication__button.button.button--close-item(href=`/articles/delete/${comment['articles.id']}/comments/${comment.id}`)
               span.visually-hidden Закрыть строку списка
 

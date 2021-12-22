@@ -18,9 +18,8 @@ myRouter.get(`/`, auth, authorize, ash(async (req, res) => {
 myRouter.get(`/comments`, auth, authorize, ash(async (req, res) => {
   const {user} = req.session;
 
-  const article = await api.getArticle(1, true);
-  const author = `Александр Петров`;
-  res.render(`comments`, {article, author, user});
+  const comments = await api.getComments();
+  res.render(`comments`, {comments, user});
 }));
 
 module.exports = myRouter;

@@ -34,7 +34,7 @@ const define = (sequelize) => {
     foreignKey: `articleId`,
     onDelete: `cascade`
   });
-  Comment.belongsTo(Article, {foreignKey: `articleId`});
+  Comment.belongsTo(Article, {as: Alias.ARTICLES, foreignKey: `articleId`});
 
   class ArticleCategory extends Model {}
 

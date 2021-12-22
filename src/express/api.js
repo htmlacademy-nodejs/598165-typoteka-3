@@ -50,6 +50,10 @@ class API {
     });
   }
 
+  getComments() {
+    return this._load(`/articles/comments`);
+  }
+
   createComment(id, data) {
     return this._load(`articles/${id}/comments`, {
       method: HttpMethod.POST,
@@ -86,6 +90,12 @@ class API {
 
   deleteArticle(id) {
     return this._load(`/articles/${id}`, {
+      method: HttpMethod.DELETE
+    });
+  }
+
+  deleteComment(articleId, commentId) {
+    return this._load(`/articles/${articleId}/comments/${commentId}`, {
       method: HttpMethod.DELETE
     });
   }

@@ -156,7 +156,7 @@ articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
     id,
     user,
     categories,
-    showEditButton: user.isHost,
+    showEditButton: user ? user.isHost : null,
     csrfToken: req.csrfToken()
   });
 }));
@@ -171,6 +171,19 @@ articlesRouter.get(`/delete/:articleId`, auth, authorize, ash(async (req, res) =
   } catch (errors) {
     const articles = await api.getArticles(true);
     res.render(`/my`, {articles, user});
+  }
+}));
+
+articlesRouter.get(`/delete/:articleId/comments/:commentId`, auth, authorize, ash(async (req, res) => {
+  const {articleId, commentId} = req.params;
+  const {user} = req.session;
+
+  try {
+    await api.deleteComment(articleId, commentId);
+    res.redirect(`/my/comments`);
+  } catch (errors) {
+    const comments = await api.getComments();
+    res.render(`comments`, {comments, user});
   }
 }));
 

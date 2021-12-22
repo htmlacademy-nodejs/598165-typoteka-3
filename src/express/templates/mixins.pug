@@ -42,7 +42,8 @@ block mixins
           a.pagination__button.button.button--backwards.button--disabled(href=`${prefix}page=${page - 1}` aria-label='Страница назад') Назад
       while i++ < end
         li.pagination__item(class={"pagination__item--active": i === page})
-          a(href=i !== page ? `${prefix}page=${i}` : null)= i
+          - link = i !== page ? `${prefix}page=${i}` : null
+          a(href=link)= i
       if end < totalPages
         li
           a.pagination__button.button.button--forward(href=`${prefix}page=${page + 1}` aria-label='Страница вперед') Вперед
@@ -65,3 +66,8 @@ block mixins
   mixin insertAvatar(avatar)
     if avatar
       img(src=`/img/${avatar}` alt='аватар пользователя')
+
+  mixin insertSmallAvatar(avatar)
+    if avatar
+      img.publication__list-image(src=`/img/${avatar}` width='20' height='20' alt='Аватар пользователя')
+
