@@ -19,6 +19,7 @@ block content
             .post__picture
               img(src=`/img/${article.picture}` width=940 height=490 alt=`${article.title}`)
           .post__text
+            p #{article.announce}
             p #{article.fullText}
 
       .post__wrapper.post__wrapper--comments

@@ -24,6 +24,11 @@ class API {
     return this._load(`/articles/${id}`, {params: {comments}});
   }
 
+  getMostCommented() {
+    return this._load(`/articles/popular`);
+
+  }
+
   search(query) {
     return this._load(`/search`, {params: {query}});
   }

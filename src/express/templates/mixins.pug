@@ -71,3 +71,10 @@ block mixins
     if avatar
       img.publication__list-image(src=`/img/${avatar}` width='20' height='20' alt='Аватар пользователя')
 
+  mixin truncateText(text, n)
+    -
+      if (text.length > n) {
+        text = text.slice(0, n + 1)
+        text = text.slice(0, text.lastIndexOf(` `)) + ` ...`
+      }
+    | #{text}

@@ -29,11 +29,18 @@ module.exports = (app, articleService, commentService) => {
     return res.status(HttpCode.OK).json(result);
   }));
 
+  route.get(`/popular`, ash(async (req, res) => {
+    const articles = await articleService.findMostCommented();
+    return res.status(HttpCode.OK)
+      .json(articles);
+  }));
+
   route.get(`/comments`, ash(async (req, res) => {
     const comments = await commentService.findAll();
     return res.status(HttpCode.OK)
       .json(comments);
   }));
+
 
   route.get(`/:articleId`, ash(async (req, res) => {
     const {comments} = req.query;
