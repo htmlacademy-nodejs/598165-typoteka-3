@@ -4,7 +4,7 @@ block header
       img.logo__image(src='/img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
       span.logo__name Типотека
     if (user)
-      if (user.isHost)
+      if (user.isAuthor)
         a.button.button--colored.header__button-new(href="/articles/add") Новая запись
         if showEditButton
           a.button.button--colored.header__button-new(href=`/articles/edit/${id}`) Редактировать

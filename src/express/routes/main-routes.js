@@ -4,12 +4,12 @@ const {Router} = require(`express`);
 const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
-const authorize = require(`../middlewares/authorize`);
+const saveAuthor = require(`../middlewares/save-author`);
 const {asyncHandler: ash} = require(`../../utils`);
 
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
-mainRouter.get(`/`, authorize, ash(async (req, res) => {
+mainRouter.get(`/`, saveAuthor, ash(async (req, res) => {
   const {user} = req.session;
 
   let {page = 1} = req.query;
@@ -77,13 +77,12 @@ mainRouter.post(`/login`, ash(async (req, res) => {
 }));
 
 mainRouter.get(`/logout`, (req, res) => {
-  delete req.session.user;
   req.session.destroy(() => {
     res.redirect(`/`);
   });
 });
 
-mainRouter.get(`/search`, authorize, ash(async (req, res) => {
+mainRouter.get(`/search`, saveAuthor, ash(async (req, res) => {
   const {query} = req.query;
   const {user} = req.session;
 

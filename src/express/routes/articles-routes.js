@@ -6,14 +6,15 @@ const csrf = require(`csurf`);
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
 const auth = require(`../middlewares/auth`);
-const authorize = require(`../middlewares/authorize`);
+const authorOnly = require(`../middlewares/author-only`);
+const saveAuthor = require(`../middlewares/save-author`);
 const {ensureArray, asyncHandler: ash} = require(`../../utils`);
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
 const articlesRouter = new Router();
 const csrfProtection = csrf();
 
-articlesRouter.get(`/category/:categoryId`, authorize, ash(async (req, res) => {
+articlesRouter.get(`/category/:categoryId`, saveAuthor, ash(async (req, res) => {
   const {categoryId} = req.params;
   const {user} = req.session;
 
@@ -40,7 +41,7 @@ articlesRouter.get(`/category/:categoryId`, authorize, ash(async (req, res) => {
   });
 }));
 
-articlesRouter.get(`/add`, auth, authorize, csrfProtection, ash(async (req, res) => {
+articlesRouter.get(`/add`, auth, saveAuthor, authorOnly, csrfProtection, ash(async (req, res) => {
   const {user} = req.session;
 
   const categories = await api.getCategories();
@@ -53,7 +54,8 @@ articlesRouter.get(`/add`, auth, authorize, csrfProtection, ash(async (req, res)
 
 articlesRouter.post(`/add`, [
   auth,
-  authorize,
+  saveAuthor,
+  authorOnly,
   upload.single(`picture`),
   csrfProtection
 ], ash(async (req, res) => {
@@ -88,7 +90,11 @@ articlesRouter.post(`/add`, [
   }
 }));
 
-articlesRouter.get(`/edit/:articleId`, auth, authorize, csrfProtection, ash(async (req, res) => {
+articlesRouter.get(`/edit/:articleId`, [
+  auth,
+  saveAuthor,
+  authorOnly,
+  csrfProtection], ash(async (req, res) => {
   const {articleId} = req.params;
   const {user} = req.session;
 
@@ -104,7 +110,8 @@ articlesRouter.get(`/edit/:articleId`, auth, authorize, csrfProtection, ash(asyn
 
 articlesRouter.post(`/edit/:articleId`, [
   auth,
-  authorize,
+  saveAuthor,
+  authorOnly,
   upload.single(`avatar`),
   csrfProtection
 ], ash(async (req, res) => {
@@ -144,7 +151,7 @@ articlesRouter.post(`/edit/:articleId`, [
   }
 }));
 
-articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
+articlesRouter.get(`/:id`, saveAuthor, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;
   const categories = await api.getCategories(true);
@@ -155,12 +162,12 @@ articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
     id,
     user,
     categories,
-    showEditButton: user ? user.isHost : null,
+    showEditButton: user ? user.isAuthor : null,
     csrfToken: req.csrfToken()
   });
 }));
 
-articlesRouter.get(`/delete/:articleId`, auth, authorize, ash(async (req, res) => {
+articlesRouter.get(`/delete/:articleId`, auth, saveAuthor, authorOnly, ash(async (req, res) => {
   const {articleId} = req.params;
   const {user} = req.session;
 
@@ -173,7 +180,7 @@ articlesRouter.get(`/delete/:articleId`, auth, authorize, ash(async (req, res) =
   }
 }));
 
-articlesRouter.get(`/delete/:articleId/comments/:commentId`, auth, authorize, ash(async (req, res) => {
+articlesRouter.get(`/delete/:articleId/comments/:commentId`, auth, saveAuthor, authorOnly, ash(async (req, res) => {
   const {articleId, commentId} = req.params;
   const {user} = req.session;
 
@@ -186,7 +193,7 @@ articlesRouter.get(`/delete/:articleId/comments/:commentId`, auth, authorize, as
   }
 }));
 
-articlesRouter.post(`/:id/comments`, auth, authorize, csrfProtection, ash(async (req, res) => {
+articlesRouter.post(`/:id/comments`, auth, saveAuthor, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {comment} = req.body;
   const {user} = req.session;

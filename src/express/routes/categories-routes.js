@@ -5,7 +5,8 @@ const csrf = require(`csurf`);
 
 const api = require(`../api`).getApi();
 const auth = require(`../middlewares/auth`);
-const authorize = require(`../middlewares/authorize`);
+const saveAuthor = require(`../middlewares/save-author`);
+const authorOnly = require(`../middlewares/author-only`);
 const {asyncHandler: ash} = require(`../../utils`);
 
 const categoriesRouter = new Router();
@@ -16,7 +17,7 @@ const CATEGORY_DELETION_ERROR = `Категория не может быть у�
 
 categoriesRouter.get(`/`, [
   auth,
-  authorize,
+  saveAuthor,
   csrfProtection
 ], ash(async (req, res) => {
   const {user} = req.session;
@@ -31,7 +32,8 @@ categoriesRouter.get(`/`, [
 
 categoriesRouter.post(`/add`, [
   auth,
-  authorize,
+  saveAuthor,
+  authorOnly,
   csrfProtection
 ], ash(async (req, res) => {
 
@@ -56,7 +58,8 @@ categoriesRouter.post(`/add`, [
 
 categoriesRouter.post(`/edit/:categoryId`, [
   auth,
-  authorize,
+  saveAuthor,
+  authorOnly,
   csrfProtection
 ], ash(async (req, res) => {
 
@@ -84,7 +87,8 @@ categoriesRouter.post(`/edit/:categoryId`, [
 
 categoriesRouter.get(`/delete/:categoryId`, [
   auth,
-  authorize,
+  saveAuthor,
+  authorOnly,
   csrfProtection
 ], ash(async (req, res) => {
 
