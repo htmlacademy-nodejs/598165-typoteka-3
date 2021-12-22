@@ -17,10 +17,11 @@ mainRouter.get(`/`, authorize, ash(async (req, res) => {
   const limit = ARTICLES_PER_PAGE;
   const offset = (page - 1) * ARTICLES_PER_PAGE;
 
-  const [{count, articles}, categories, popular] = await Promise.all([
+  const [{count, articles}, categories, popular, comments] = await Promise.all([
     api.getArticles({offset, limit, comments: true}),
     api.getCategories(true),
-    api.getMostCommented()
+    api.getMostCommented(),
+    api.getComments()
   ]);
   const totalPages = Math.ceil(count / ARTICLES_PER_PAGE);
   res.render(`main`, {
@@ -29,7 +30,8 @@ mainRouter.get(`/`, authorize, ash(async (req, res) => {
     totalPages,
     categories,
     popular,
-    user
+    comments: comments.slice(0, 4),
+    user,
   });
 }));
 

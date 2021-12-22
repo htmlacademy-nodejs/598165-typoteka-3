@@ -1,0 +1,18 @@
+section.main-page__last.last
+  h2.last__name
+    | Последние комментарии
+    span.last__icon.last__icon--cloud
+  if comments && comments.length
+    ul.last__list
+      each comment in comments
+        li.last__list-item
+          if comment['users.avatar']
+            img.last__list-image(src=`img/${comment['users.avatar']}` width='20' height='20' alt='Аватар пользователя')
+          b.last__list-name #{comment['users.firstName']} #{comment['users.lastName']}
+          a.last__list-link(href='#')
+            +truncateText(comment.text, 100)
+
+  else
+    p Здесь пока ничего нет
+
+
