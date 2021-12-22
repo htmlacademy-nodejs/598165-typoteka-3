@@ -9,7 +9,7 @@ section.main-page__last.last
           if comment['users.avatar']
             img.last__list-image(src=`img/${comment['users.avatar']}` width='20' height='20' alt='Аватар пользователя')
           b.last__list-name #{comment['users.firstName']} #{comment['users.lastName']}
-          a.last__list-link(href='#')
+          a.last__list-link(href=`/articles/${comment['articles.id']}`)
             +truncateText(comment.text, 100)
 
   else
