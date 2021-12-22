@@ -24,19 +24,22 @@ block content
 
       .post__wrapper.post__wrapper--comments
         section.post__comments.comments
-          h2.comments__title.title.title--middle Комментарии
-          ul.comments__list
-            each comment in article.comments
-              li.comments__comment
-              .comments__avatar.avatar
-                +insertAvatar(comment.users.avatar)
-              .comments__text
-                .comments__head
-                  p #{comment.users.firstName} #{comment.users.lastName} •
-                  - date = new Date(comment.createdAt);
-                  time.comments__date(datetime=date.toISOString())
-                    +formatDate(date)
-                p.comments__message #{comment.text}
+          if article.comments && article.comments.length
+            h2.comments__title.title.title--middle Комментарии
+            ul.comments__list
+              each comment in article.comments
+                li.comments__comment
+                .comments__avatar.avatar
+                  +insertAvatar(comment.users.avatar)
+                .comments__text
+                  .comments__head
+                    p #{comment.users.firstName} #{comment.users.lastName} •
+                    - date = new Date(comment.createdAt);
+                    time.comments__date(datetime=date.toISOString())
+                      +formatDate(date)
+                  p.comments__message #{comment.text}
+          else
+            h2.comments__title.title.title--middle Комментарии отсутствуют
           if (user)
             .comments__footer.comments__footer--user
               form(
@@ -52,6 +55,16 @@ block content
                     placeholder='Присоединиться к обсуждению')
                 button.comments__button.button.button--colored(type='submit') Опубликовать
                 +insertErrorMessageList(errors)
+          else
+            .comments__footer.comments__footer--visitor
+              a.comments__button.button.button--colored(href="/login") Войти
+              .comments__registration
+                p.text.text--signature
+                  b.title.title--small Регистрация
+                  | Чтобы присоединиться к переписке нужно зарегистрироваться
+
+
+
 block scripts
   script(src='/js/vendor.js')
   script(src='/js/main.js')

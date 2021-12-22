@@ -144,7 +144,6 @@ articlesRouter.post(`/edit/:articleId`, [
   }
 }));
 
-
 articlesRouter.get(`/:id`, authorize, csrfProtection, ash(async (req, res) => {
   const {id} = req.params;
   const {user} = req.session;

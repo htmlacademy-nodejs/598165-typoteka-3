@@ -5,19 +5,22 @@ block content
   main.main-page
     h1.visually-hidden Главная страница личного блога Типотека
     p.
-
       Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
-    section.main-page__theme-list
-      h2.visually-hidden Список тем
-      ul.themes
-        include partials/categories-list
-    .main-page__section-flex
-      include partials/popular
-      include partials/last-comments
-    section.main-page__list.preview
-      include partials/articles-list
-    .preview__toggle-wrapper
-      +pagination(page, totalPages, 1, `?`)
+    if articles && articles.length
+      section.main-page__theme-list
+        h2.visually-hidden Список тем
+        ul.themes
+          include partials/categories-list
+      .main-page__section-flex
+        include partials/popular
+        include partials/last-comments
+      section.main-page__list.preview
+        include partials/articles-list
+      .preview__toggle-wrapper
+        +pagination(page, totalPages, 1, `?`)
+    else
+      .main-page__empty-wrapper
+        p.main-page__empty-text Здесь пока пусто!
 
 block scripts
   script(src='/js/vendor.js')

@@ -9,7 +9,11 @@ block content
     .articles-category__theme-list
       ul.themes
         include partials/categories-list
-    section.articles-category__list.preview
-      include partials/articles-list
-    .preview__toggle-wrapper
-      +pagination(page, totalPages, 1, `?`)
+    if articles && articles.length
+      section.articles-category__list.preview
+        include partials/articles-list
+      .preview__toggle-wrapper
+        +pagination(page, totalPages, 1, `?`)
+    else
+      .main-page__empty-wrapper
+        p.main-page__empty-text Здесь пока пусто!

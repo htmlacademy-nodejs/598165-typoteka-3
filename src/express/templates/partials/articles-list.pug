@@ -5,7 +5,7 @@ ul.preview__list
       ul.preview__breadcrumbs(style=`flex-wrap: wrap;`)
         each category in article.categories
           li.preview__breadcrumbs-item
-            a.preview__breadcrumbs-link(href='#') #{category.name}
+            a.preview__breadcrumbs-link(href=`/articles/category/${category.id}`) #{category.name}
       +insertArticleImg(article)
       - date = new Date(article.createdAt);
       time.preview__time(datetime=`${date.toISOString()}`)
