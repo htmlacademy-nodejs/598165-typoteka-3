@@ -112,7 +112,7 @@ articlesRouter.post(`/edit/:articleId`, [
   auth,
   saveAuthor,
   authorOnly,
-  upload.single(`avatar`),
+  upload.single(`picture`),
   csrfProtection
 ], ash(async (req, res) => {
 
@@ -146,7 +146,8 @@ articlesRouter.post(`/edit/:articleId`, [
       article: savedInputs,
       categories,
       errors,
-      user
+      user,
+      csrfToken: req.csrfToken()
     });
   }
 }));

@@ -15,6 +15,7 @@ block content
         a.popup__button.button.button--popup-close(href=`/articles/${articleId}`  aria-label='Закрыть окно') Закрыть окно
         .new-publication__form.form
           form#edit-form(action=`/articles/edit/${articleId}` method='POST' enctype='multipart/form-data')
+            input(type="hidden" name="_csrf" value=csrfToken)
             .form__wrapper.form__wrapper--intro
               .form__field
                 label
@@ -26,7 +27,7 @@ block content
                 +insertErrorMessage('picture', errors)
                 .form__image-loader.form__image-loader--publication
                   label
-                    input.visually-hidden(type='file')
+                    input.visually-hidden(type='file' name='picture')
                     | Обзор
                 button.button.button--transparent Удалить
               div.form__checkbox-field

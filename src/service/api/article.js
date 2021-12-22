@@ -71,7 +71,12 @@ module.exports = (app, articleService, commentService) => {
         .send(`Article with ID ${articleId} wasn't found`);
     }
 
-    const isUpdated = articleService.update(articleId, req.body);
+    const edition = req.body;
+
+    if (!edition.picture) {
+      edition.picture = oldArticle.picture;
+    }
+    const isUpdated = articleService.update(articleId, edition);
 
     if (!isUpdated) {
       return res.status(HttpCode.NOT_FOUND).send(`Article with id ${articleId} wasn't found`);
