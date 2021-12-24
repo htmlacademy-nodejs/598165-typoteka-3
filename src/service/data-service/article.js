@@ -139,7 +139,7 @@ class ArticleService {
         }]
       });
       options.order = [
-        [{model: this._Comment, as: Alias.COMMENTS}, `createdAt`, `ASC`]
+        [{model: this._Comment, as: Alias.COMMENTS}, `createdAt`, `DESC`]
       ];
     }
     return this._Article.findOne(options);

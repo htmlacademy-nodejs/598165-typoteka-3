@@ -5,6 +5,7 @@
   "main": "./src/service/service.js",
   "scripts": {
     "eslint": "eslint --ext .js src/",
+    "filldb": "node -r dotenv/config ./src/service/service.js --filldb",
     "server": "nodemon ./src/service/service.js --server",
     "start-back-server": "cross-env LOG_LEVEL=error node -r dotenv/config ./src/service/service.js --server",
     "start-back-server:debug": "cross-env LOG_LEVEL=info NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js --server",

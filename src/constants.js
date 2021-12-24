@@ -1,5 +1,6 @@
 'use strict';
 
+const BLOG_AUTHOR_USER_ID = 1;
 const MOCK_FILE = `mocks.json`;
 
 const DEFAULT_COMMAND = `--help`;
@@ -32,7 +33,6 @@ const HttpMethod = {
   DELETE: `DELETE`
 };
 
-const BLOG_AUTHOR_USER_ID = 3;
 
 module.exports = {
   MOCK_FILE,
