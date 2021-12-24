@@ -205,7 +205,16 @@ articlesRouter.post(`/:id/comments`, auth, saveAuthor, csrfProtection, ash(async
   } catch (err) {
     const errors = err.response.data;
     const article = await api.getArticle(id, true);
-    res.render(`articles/article`, {article, id, errors, user});
+    const categories = await api.getCategories(true);
+    res.render(`articles/article`, {
+      article,
+      id,
+      errors,
+      user,
+      categories,
+      showEditButton: user ? user.isAuthor : null,
+      csrfToken: req.csrfToken()
+    });
   }
 }));
 
