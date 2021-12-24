@@ -32,11 +32,11 @@ block content
                 .form__field
                   label
                     input(type='text' placeholder='Заголовок' name='title' value=article.title required)
-                  +insertErrorMessage('title', errors)
+                  +insertErrorMessage('title', errors, `field__validation-error`)
                 .form__field.form__field--post-image
                   label
                     input#image-name-field(type='text' placeholder='Фотография' readonly)
-                    +insertErrorMessage('picture', errors)
+                    +insertErrorMessage('picture', errors, `field__validation-error`)
                   .form__image-loader.form__image-loader--publication
                     label
                       input.visually-hidden(type='file' name='picture')
@@ -54,18 +54,18 @@ block content
                       )
                       label(for=`checkbox-${category.id}`) #{category.name}
                   a.new-publication__form-link.button.button--transparent(href='/categories') Добавить
-                  +insertErrorMessage('categories', errors)
+                +insertErrorMessage('categories', errors, `field__validation-error`)
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='2' placeholder='Анонс публикации' name='announce')
                       | #{article.announce}
-                  +insertErrorMessage('announce', errors)
+                  +insertErrorMessage('announce', errors, `field__validation-error`)
                 .form__field.form__field--publication-text
                   label
                     textarea(rows='5' placeholder='Полный текст публикации' name='full-text')
                       | #{article.fullText}
-                  +insertErrorMessage('fullText', errors)
+                    +insertErrorMessage('fullText', errors, `field__validation-error`)
           +insertErrorMessageList(errors)
       .modal__overlay
 

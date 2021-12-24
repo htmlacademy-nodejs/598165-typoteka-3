@@ -262,12 +262,18 @@ describe(`API creates a comment if the data is valid`, () => {
   let app;
   let response;
   const newComment = {
-    text: `Валидный комментарий`,
+    text: `Валидный комментарий комментарий`,
     userId: 1
   };
 
   beforeAll(async () => {
     app = await createApi();
+    app.locals = {
+      socketio: {
+        emit: () => {
+        }
+      }
+    };
     response = await request(app)
       .post(`/articles/2/comments`)
       .send(newComment);

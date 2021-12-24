@@ -11,6 +11,10 @@ html(lang='ru')
     link(rel='preload' href='/fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='stylesheet' href='/css/style.min.css')
     style.
+      a:not([href]) {
+        cursor: default;
+      }
+
       .form__checkbox-field {
         padding-top: 30px;
         position: relative;
@@ -56,7 +60,11 @@ html(lang='ru')
       include partials/footer.pug
 
     include partials/modal
+    include partials/popular-article-template
+    include partials/last-comment-template
 
+    script(src="https://cdn.socket.io/4.0.1/socket.io.js")
     block scripts
+    script(src='/js/socket.js')
 
 

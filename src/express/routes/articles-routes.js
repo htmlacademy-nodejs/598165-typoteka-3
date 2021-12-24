@@ -85,7 +85,8 @@ articlesRouter.post(`/add`, [
       savedInputs,
       categories,
       errors,
-      user
+      user,
+      csrfToken: req.csrfToken()
     });
   }
 }));

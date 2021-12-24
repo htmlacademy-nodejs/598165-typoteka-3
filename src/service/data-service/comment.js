@@ -34,6 +34,26 @@ class CommentService {
     });
   }
 
+  findOne(id) {
+    return this._Comment.findOne({
+      where: id,
+      attributes: [`id`, `text`, `createdAt`],
+      include: [
+        {
+          model: this._User,
+          as: Alias.USERS,
+          attributes: [`firstName`, `lastName`, `avatar`]
+        },
+        {
+          model: this._Article,
+          as: Alias.ARTICLES,
+          attributes: [`title`, `id`]
+        }
+      ],
+      raw: true
+    });
+  }
+
   create(articleId, comment) {
     return this._Comment.create(({
       articleId,

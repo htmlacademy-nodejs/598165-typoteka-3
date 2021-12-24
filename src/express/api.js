@@ -60,7 +60,7 @@ class API {
   }
 
   createComment(id, data) {
-    return this._load(`articles/${id}/comments`, {
+    return this._load(`/articles/${id}/comments`, {
       method: HttpMethod.POST,
       data
     });

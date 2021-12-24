@@ -58,10 +58,11 @@ block mixins
           each message in errorsMessages
             li.form__error= message
 
-  mixin insertErrorMessage(key, errors)
+  mixin insertErrorMessage(key, errors, className)
     if errors
       if key in errors
-        | #{errors[key]}
+        p(class=className)
+          | #{errors[key]}
 
   mixin insertAvatar(avatar)
     if avatar
@@ -74,7 +75,7 @@ block mixins
   mixin truncateText(text, n)
     -
       if (text.length > n) {
-        text = text.slice(0, n + 1)
+        text = text.slice(0, n)
         text = text.slice(0, text.lastIndexOf(` `))
       }
     | #{text}&nbsp;...

@@ -1,5 +1,14 @@
 'use strict';
 
+const buttonBackwards = document.querySelector(`.button--backwards`);
+if (buttonBackwards) {
+  buttonBackwards.addEventListener(`click`, (e) => {
+    e.preventDefault();
+    history.back();
+  })
+}
+
+
 // логика выбора даты в календаре
 
 let calendar = document.querySelector('.calendar');

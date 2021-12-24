@@ -12,7 +12,7 @@ block content
             span.visually-hidden Добавить категорию
           button.category__button.button.button--category(type='submit') Добавить
       p.field__validation-error-category
-        +insertErrorMessage('name',addErrors)
+        +insertErrorMessage('name',addErrors, `field__validation-error-category`)
       ul.category__list
         for category in categories
           li.category__list-item
@@ -28,5 +28,5 @@ block content
               a.category__button.button.button--category(href=`/categories/delete/${category.id}`) Удалить
             p.field__validation-error-category.field__validation-error-category--edit
               if category.id === +editCategoryId
-                +insertErrorMessage('name',errors)
+                +insertErrorMessage('name',errors, `field__validation-error-category`)
 

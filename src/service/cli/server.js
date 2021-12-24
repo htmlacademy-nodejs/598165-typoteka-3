@@ -1,6 +1,9 @@
 'use strict';
 
 const express = require(`express`);
+const http = require(`http`);
+const socket = require(`../lib/socket`);
+
 const {Router} = require(`express`);
 
 const {
@@ -16,6 +19,11 @@ const {HttpCode, API_PREFIX, ExitCode} = require(`../../constants`);
 const DEFAULT_PORT = process.env.PORT || 3000;
 
 const app = express();
+const server = http.createServer(app);
+const io = socket(server);
+
+app.locals.socketio = io;
+
 const logger = getLogger({name: `api`});
 const routes = new Router();
 
@@ -60,12 +68,12 @@ module.exports = {
       logger.error(`An error occurred: ${error.message}`);
       process.exit(ExitCode.error);
     }
-    logger.info(`A connection to the database established`);
+    logger.info(`A connection to the database is established`);
 
     const [customPort] = args;
     const port = parseInt(customPort, 10) || DEFAULT_PORT;
     try {
-      app.listen(port, (err) => {
+      server.listen(port, (err) => {
         if (err) {
           return logger.error(`An error occurred on server creation: ${err.message()}`);
         }
