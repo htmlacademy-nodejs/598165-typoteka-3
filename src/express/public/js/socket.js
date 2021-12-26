@@ -7,7 +7,7 @@
 
   const socket = io(SERVER_URL);
 
-  const createLastCommentElement = (comment) => {
+  const createCommentElement = (comment) => {
     const lastCommentTemplate = document.querySelector('#last-comment-template');
     const lastCommentElement = lastCommentTemplate.cloneNode(true).content;
 
@@ -22,7 +22,7 @@
       .innerText = `${comment['users.firstName']} ${comment['users.lastName']}`;
 
     const link = lastCommentElement.querySelector(`.last__list-link`);
-    link.href = `/articles/${comment['articleId']}`;
+    link.href = `/articles/${comment['articles.id']}`;
     truncateText(link, comment.text, TRUNCATED_TEXT_LENGTH);
 
     return lastCommentElement;
@@ -58,8 +58,17 @@
     if (lastCommentsItems.length === UPDATING_ITEMS_NUMBER) {
       lastCommentsItems[UPDATING_ITEMS_NUMBER - 1].remove();
     }
-    lastCommentsList.prepend(createLastCommentElement(comment));
+    lastCommentsList.prepend(createCommentElement(comment));
   };
+
+  const updateDeleteComments = (comments) => {
+    const lastCommentsList = document.querySelector(`.last__list`);
+    lastCommentsList.innerHTML = ``;
+    comments.forEach((comment) => {
+      lastCommentsList.append(createCommentElement(comment));
+    })
+  };
+
 
   const truncateText = (el, text, n) => {
     if (text.length > n) {
@@ -74,6 +83,11 @@
 
   socket.addEventListener('comment:create', (comment, populars) => {
     updateLastComments(comment);
+    updatePopularElements(populars);
+  })
+
+  socket.addEventListener('comment:delete', (comments, populars) => {
+    updateDeleteComments(comments)
     updatePopularElements(populars);
   })
 })();

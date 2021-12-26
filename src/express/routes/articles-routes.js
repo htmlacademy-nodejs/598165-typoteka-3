@@ -14,6 +14,18 @@ const {ARTICLES_PER_PAGE} = require(`../../constants`);
 const articlesRouter = new Router();
 const csrfProtection = csrf();
 
+const getAddArticleData = async () => {
+  return api.getCategories();
+};
+
+const getEditArticleData = async (articleId) => {
+  const [article, categories] = await Promise.all([
+    api.getArticle(articleId),
+    api.getCategories()
+  ]);
+  return [article, categories];
+};
+
 articlesRouter.get(`/category/:categoryId`, saveAuthor, ash(async (req, res) => {
   const {categoryId} = req.params;
   const {user} = req.session;
@@ -187,7 +199,12 @@ articlesRouter.get(`/delete/:articleId/comments/:commentId`, auth, saveAuthor, a
   const {user} = req.session;
 
   try {
-    await api.deleteComment(articleId, commentId);
+    let {comments, popularArticles} = await api.deleteComment(articleId, commentId);
+
+    const io = req.app.locals.socketio;
+    comments = comments.slice(0, 4);
+    io.emit(`comment:delete`, comments, popularArticles);
+
     res.redirect(`/my/comments`);
   } catch (errors) {
     const comments = await api.getComments();
@@ -225,17 +242,5 @@ articlesRouter.post(`/:id/comments`, auth, saveAuthor, csrfProtection, ash(async
     });
   }
 }));
-
-function getAddArticleData() {
-  return api.getCategories();
-}
-
-async function getEditArticleData(articleId) {
-  const [article, categories] = await Promise.all([
-    api.getArticle(articleId),
-    api.getCategories()
-  ]);
-  return [article, categories];
-}
 
 module.exports = articlesRouter;

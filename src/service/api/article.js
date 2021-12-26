@@ -116,8 +116,16 @@ module.exports = (app, articleService, commentService) => {
         .send(`Not found`);
     }
 
+    const [comments, popularArticles] = await Promise.all([
+      commentService.findAll(),
+      articleService.findMostCommented()
+    ]);
+
     return res.status(HttpCode.OK)
-      .send(`Deleted`);
+      .json({
+        comments,
+        popularArticles
+      });
   }));
 
   route.post(`/:articleId/comments`, [
