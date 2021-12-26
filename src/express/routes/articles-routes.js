@@ -201,7 +201,14 @@ articlesRouter.post(`/:id/comments`, auth, saveAuthor, csrfProtection, ash(async
   const {user} = req.session;
 
   try {
-    await api.createComment(id, {userId: user.id, text: comment});
+    const {
+      newComment,
+      popularArticles
+    } = await api.createComment(id, {userId: user.id, text: comment});
+
+    const io = req.app.locals.socketio;
+    io.emit(`comment:create`, newComment, popularArticles);
+
     res.redirect(`/articles/${id}`);
   } catch (err) {
     const errors = err.response.data;

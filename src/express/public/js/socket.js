@@ -1,7 +1,7 @@
 "use strict";
 
 (() => {
-  const SERVER_URL = `http://localhost:3000`;
+  const SERVER_URL = `http://localhost:8080`;
   const UPDATING_ITEMS_NUMBER = 4;
   const TRUNCATED_TEXT_LENGTH = 100;
 
@@ -11,12 +11,11 @@
     const lastCommentTemplate = document.querySelector('#last-comment-template');
     const lastCommentElement = lastCommentTemplate.cloneNode(true).content;
 
+    const avatar = lastCommentElement.querySelector(`.last__list-image`)
     if (comment['users.avatar']) {
-      const avatar = lastCommentElement.querySelector(`.last__list-image`)
       avatar.src = `img/${comment['users.avatar']}`;
-      avatar.width = 20;
-      avatar.height = 20;
-      avatar.alt = `Аватар пользователя`;
+    } else {
+      avatar.src = `img/icons/smile.svg`
     }
 
     lastCommentElement.querySelector(`.last__list-name`)
@@ -24,8 +23,7 @@
 
     const link = lastCommentElement.querySelector(`.last__list-link`);
     link.href = `/articles/${comment['articleId']}`;
-    link.innerText = truncateText(comment.text, TRUNCATED_TEXT_LENGTH);
-    link.innerHTML += `&nbsp...`;
+    truncateText(link, comment.text, TRUNCATED_TEXT_LENGTH);
 
     return lastCommentElement;
   };
@@ -44,8 +42,7 @@
 
     const popularListLink = popularElement.querySelector('.hot__list-link');
     popularListLink.href = `articles/${popular.id}`;
-    popularListLink.innerText = truncateText(popular.announce, TRUNCATED_TEXT_LENGTH);
-    popularListLink.innerHTML += `&nbsp...`;
+    truncateText(popularListLink, popular.announce, TRUNCATED_TEXT_LENGTH);
     const sup = document.createElement(`sup`);
     sup.classList.add(`hot__link-sup`);
     sup.innerText = popular[`comments-count`]
@@ -64,15 +61,18 @@
     lastCommentsList.prepend(createLastCommentElement(comment));
   };
 
-  const truncateText = (text, n) => {
-    return text.length > n
-      ? text.slice(0, TRUNCATED_TEXT_LENGTH).slice(0, text.lastIndexOf(` `))
-      : text;
+  const truncateText = (el, text, n) => {
+    if (text.length > n) {
+      text = text.slice(0, TRUNCATED_TEXT_LENGTH);
+      text = text.slice(0, text.lastIndexOf(` `));
+      el.innerText = text;
+      el.innerHTML += `&nbsp;...`
+    } else {
+      el.innerText = text;
+    }
   };
 
-
   socket.addEventListener('comment:create', (comment, populars) => {
-    console.log(populars);
     updateLastComments(comment);
     updatePopularElements(populars);
   })

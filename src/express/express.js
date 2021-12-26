@@ -1,6 +1,9 @@
 'use strict';
 const path = require(`path`);
 const express = require(`express`);
+const http = require(`http`);
+const socket = require(`./lib/socket`);
+
 const session = require(`express-session`);
 
 const mainRoutes = require(`./routes/main-routes`);
@@ -25,6 +28,11 @@ if (!SESSION_SECRET) {
 }
 
 const app = express();
+const server = http.createServer(app);
+
+const io = socket(server);
+app.locals.socketio = io;
+
 const logger = getLogger({name: `front-server`});
 
 const mySessionStore = new SequelizeStore({
@@ -71,7 +79,7 @@ app.use((err, req, res, _next) => {
   logger.error(`An error occurred while processing the request: ${err.message}`);
 });
 
-app.listen(DEFAULT_PORT, () => {
+server.listen(DEFAULT_PORT, () => {
   console.log(`Server started at port ${DEFAULT_PORT}`);
 });
 

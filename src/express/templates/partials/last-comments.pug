@@ -8,6 +8,8 @@ section.main-page__last.last
         li.last__list-item
           if comment['users.avatar']
             img.last__list-image(src=`img/${comment['users.avatar']}` width='20' height='20' alt='Аватар пользователя')
+          else
+            img.last__list-image(src=`img/icons/smile.svg` width='20' height='20' alt='Аватар пользователя')
           b.last__list-name #{comment['users.firstName']} #{comment['users.lastName']}
           a.last__list-link(href=`/articles/${comment['articles.id']}`)
             +truncateText(comment.text, 100)
