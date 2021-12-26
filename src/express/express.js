@@ -72,10 +72,14 @@ app.use(`/articles`, articlesRouter);
 app.use(`/my`, myRouter);
 app.use(`/`, mainRoutes);
 
-app.use((req, res) => res.status(HttpCode.NOT_FOUND).render(`errors/404`));
+app.use((req, res) => {
+  const user = req.session;
+  return res.status(HttpCode.NOT_FOUND).render(`errors/404`, user);
+});
 app.use((err, req, res, _next) => {
+  const user = req.session;
   res.status(HttpCode.INTERNAL_SERVER_ERROR)
-    .render(`errors/500`);
+    .render(`errors/500`, user);
   logger.error(`An error occurred while processing the request: ${err.message}`);
 });
 
