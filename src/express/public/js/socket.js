@@ -1,11 +1,10 @@
 "use strict";
 
 (() => {
-  const SERVER_URL = `http://localhost:8080`;
   const UPDATING_ITEMS_NUMBER = 4;
   const TRUNCATED_TEXT_LENGTH = 100;
 
-  const socket = io(SERVER_URL);
+  const socket = io(window.location.origin);
 
   const createCommentElement = (comment) => {
     const lastCommentTemplate = document.querySelector('#last-comment-template');
