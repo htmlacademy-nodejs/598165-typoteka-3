@@ -5,11 +5,11 @@ const mainRouter = new Router();
 const api = require(`../api`).getApi();
 const {upload} = require(`../middlewares/upload`);
 const saveAuthor = require(`../middlewares/save-author`);
-const {asyncHandler: ash} = require(`../../utils`);
+const {handleAsync} = require(`../../utils`);
 
 const {ARTICLES_PER_PAGE} = require(`../../constants`);
 
-mainRouter.get(`/`, saveAuthor, ash(async (req, res) => {
+mainRouter.get(`/`, saveAuthor, handleAsync(async (req, res) => {
   const {user} = req.session;
 
   let {page = 1} = req.query;
@@ -38,7 +38,7 @@ mainRouter.get(`/`, saveAuthor, ash(async (req, res) => {
 mainRouter.get(`/register`, (req, res) => res
   .render(`sign-up`, {noPopup: true}));
 
-mainRouter.post(`/register`, upload.single(`avatar`), ash(async (req, res) => {
+mainRouter.post(`/register`, upload.single(`avatar`), handleAsync(async (req, res) => {
   const {body, file} = req;
   const userData = {
     avatar: file ? file.filename : ``,
@@ -63,7 +63,7 @@ mainRouter.post(`/register`, upload.single(`avatar`), ash(async (req, res) => {
 mainRouter.get(`/login`, (req, res) => res
   .render(`sign-up`, {noPopup: true, login: true}));
 
-mainRouter.post(`/login`, ash(async (req, res) => {
+mainRouter.post(`/login`, handleAsync(async (req, res) => {
   try {
     req.session.user = await api
       .auth(req.body[`user-email`], req.body[`user-password`]);
@@ -82,7 +82,7 @@ mainRouter.get(`/logout`, (req, res) => {
   });
 });
 
-mainRouter.get(`/search`, saveAuthor, ash(async (req, res) => {
+mainRouter.get(`/search`, saveAuthor, handleAsync(async (req, res) => {
   const {query} = req.query;
   const {user} = req.session;
 

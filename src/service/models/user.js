@@ -8,8 +8,7 @@ const define = (sequelize) => {
 
   return User.init({
     email: {
-      // eslint-disable-next-line new-cap
-      type: DataTypes.STRING(320),
+      type: DataTypes[`STRING`](320),
       allowNull: false
     },
     passwordHash: {

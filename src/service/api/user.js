@@ -6,7 +6,7 @@ const getValidator = require(`../middleware/get-validator`);
 const {schema} = require(`../middleware/model-schemas/user`);
 const emailExistValidator = require(`../middleware/email-exists`);
 const passwordUtils = require(`../lib/password`);
-const {asyncHandler: ash} = require(`../../utils`);
+const {handleAsync} = require(`../../utils`);
 const ERROR_AUTH_MESSAGE = `Неверный электронный адрес или пароль`;
 
 module.exports = (app, service) => {
@@ -18,7 +18,7 @@ module.exports = (app, service) => {
   route.post(`/`, [
     userValidator,
     emailExistValidator(service),
-  ], ash(async (req, res) => {
+  ], handleAsync(async (req, res) => {
     const data = req.body;
 
     data.passwordHash = await passwordUtils.hash(data.password);
@@ -29,7 +29,7 @@ module.exports = (app, service) => {
       .json(result);
   }));
 
-  route.post(`/auth`, ash(async (req, res) => {
+  route.post(`/auth`, handleAsync(async (req, res) => {
     const {email, password} = req.body;
     const user = await service.findByEmail(email);
 

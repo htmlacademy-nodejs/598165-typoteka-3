@@ -46,8 +46,8 @@ const checkFileType = (file) => {
   return FILE_TYPES.includes(file.mimetype);
 };
 
-const asyncHandler = (callback) => {
-  return async function (req, res, next) {
+const handleAsync = (callback) => {
+  return async (req, res, next) => {
     try {
       return await callback(req, res);
     } catch (err) {
@@ -65,6 +65,6 @@ module.exports = {
   getRandomSubarray,
   getRandomFromArray,
   checkFileType,
-  asyncHandler,
+  handleAsync,
   prepareErrors,
 };

@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
-const {asyncHandler: ash} = require(`../../utils`);
+const {handleAsync} = require(`../../utils`);
 
 const getValidator = require(`../middleware/get-validator`);
 const schema = require(`../middleware/model-schemas/category`);
@@ -13,14 +13,14 @@ module.exports = (app, service) => {
   const route = new Router();
   app.use(`/category`, route);
 
-  route.get(`/`, ash(async (req, res) => {
+  route.get(`/`, handleAsync(async (req, res) => {
     const {count} = req.query;
     const categories = await service.findAll(count);
     res.status(HttpCode.OK)
       .json(categories);
   }));
 
-  route.get(`/:categoryId`, ash(async (req, res) => {
+  route.get(`/:categoryId`, handleAsync(async (req, res) => {
     const {categoryId} = req.params;
     const {limit, offset} = req.query;
 
@@ -60,7 +60,7 @@ module.exports = (app, service) => {
       .send(`Updated`);
   });
 
-  route.delete(`/:categoryId`, ash(async (req, res) => {
+  route.delete(`/:categoryId`, handleAsync(async (req, res) => {
     const {categoryId} = req.params;
     const isDelete = await service.drop(categoryId);
 

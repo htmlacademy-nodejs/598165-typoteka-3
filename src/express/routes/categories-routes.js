@@ -7,7 +7,7 @@ const api = require(`../api`).getApi();
 const auth = require(`../middlewares/auth`);
 const saveAuthor = require(`../middlewares/save-author`);
 const authorOnly = require(`../middlewares/author-only`);
-const {asyncHandler: ash} = require(`../../utils`);
+const {handleAsync} = require(`../../utils`);
 
 const categoriesRouter = new Router();
 const csrfProtection = csrf();
@@ -19,7 +19,7 @@ categoriesRouter.get(`/`, [
   auth,
   saveAuthor,
   csrfProtection
-], ash(async (req, res) => {
+], handleAsync(async (req, res) => {
   const {user} = req.session;
   const categories = await api.getCategories();
 
@@ -35,7 +35,7 @@ categoriesRouter.post(`/add`, [
   saveAuthor,
   authorOnly,
   csrfProtection
-], ash(async (req, res) => {
+], handleAsync(async (req, res) => {
 
   const {category} = req.body;
   const {user} = req.session;
@@ -61,7 +61,7 @@ categoriesRouter.post(`/edit/:categoryId`, [
   saveAuthor,
   authorOnly,
   csrfProtection
-], ash(async (req, res) => {
+], handleAsync(async (req, res) => {
 
   const {category} = req.body;
   const {categoryId} = req.params;
@@ -90,7 +90,7 @@ categoriesRouter.get(`/delete/:categoryId`, [
   saveAuthor,
   authorOnly,
   csrfProtection
-], ash(async (req, res) => {
+], handleAsync(async (req, res) => {
 
   const {categoryId} = req.params;
   const {user} = req.session;

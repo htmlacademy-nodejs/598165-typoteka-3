@@ -26,9 +26,8 @@ class CategoryService {
         }]
       });
       return result.map((it) => it.get());
-    } else {
-      return await this._Category.findAll({raw: true});
     }
+    return await this._Category.findAll({raw: true});
   }
 
   async findOne(categoryId) {
