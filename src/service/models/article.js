@@ -8,8 +8,7 @@ const define = (sequelize) => {
 
   return Article.init({
     title: {
-      // eslint-disable-next-line new-cap
-      type: DataTypes.STRING,
+      type: DataTypes[`STRING`](),
       allowNull: false
     },
     announce: {
@@ -17,8 +16,7 @@ const define = (sequelize) => {
       allowNull: false
     },
     fullText: {
-      // eslint-disable-next-line new-cap
-      type: DataTypes.STRING(1000),
+      type: DataTypes[`STRING`](1000),
     },
     picture: DataTypes.STRING,
   }, {

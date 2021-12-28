@@ -1,10 +1,22 @@
 'use strict';
 
+const API_PREFIX = `/api`;
+const ARTICLES_PER_PAGE = 8;
 const BLOG_AUTHOR_USER_ID = 1;
-const MOCK_FILE = `mocks.json`;
-
 const DEFAULT_COMMAND = `--help`;
+const MOCK_FILE = `mocks.json`;
 const USER_ARGV_INDEX = 2;
+
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
+const ExitCode = {
+  error: 1,
+  success: 0,
+};
+
 const HttpCode = {
   OK: 200,
   CREATED: 201,
@@ -14,17 +26,6 @@ const HttpCode = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 };
-const ExitCode = {
-  error: 1,
-  success: 0,
-};
-const API_PREFIX = `/api`;
-const Env = {
-  DEVELOPMENT: `development`,
-  PRODUCTION: `production`
-};
-
-const ARTICLES_PER_PAGE = 8;
 
 const HttpMethod = {
   GET: `GET`,
@@ -33,16 +34,15 @@ const HttpMethod = {
   DELETE: `DELETE`
 };
 
-
 module.exports = {
-  MOCK_FILE,
-  DEFAULT_COMMAND,
-  USER_ARGV_INDEX,
-  HttpCode,
-  ExitCode,
   API_PREFIX,
-  Env,
   ARTICLES_PER_PAGE,
+  BLOG_AUTHOR_USER_ID,
+  DEFAULT_COMMAND,
+  MOCK_FILE,
+  USER_ARGV_INDEX,
+  Env,
+  ExitCode,
+  HttpCode,
   HttpMethod,
-  BLOG_AUTHOR_USER_ID
 };

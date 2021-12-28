@@ -15,11 +15,12 @@ const {HttpCode} = require(`../constants`);
 
 const SequelizeStore = require(`connect-session-sequelize`)(session.Store);
 const {getSequelize} = require(`../service/lib/sequelize`);
-const sequelize = getSequelize();
 
 const DEFAULT_PORT = 8080;
 const PUBLIC_DIR = `public`;
 const UPLOAD_DIR = `upload`;
+
+const sequelize = getSequelize();
 const {getLogger} = require(`../service/lib/logger`);
 
 const {SESSION_SECRET} = process.env;

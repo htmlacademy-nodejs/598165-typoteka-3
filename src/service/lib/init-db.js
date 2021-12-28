@@ -36,7 +36,6 @@ module.exports = async (sequelize, {categories, articles, users}) => {
     }
   });
 
-  // await Promise.all(articlesPromises);
   for (const articlePromise of articlesPromises) {
     await articlePromise();
   }
